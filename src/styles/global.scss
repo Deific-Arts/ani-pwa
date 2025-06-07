@@ -1,0 +1,58 @@
+@use '/node_modules/kemet-ui/dist/styles/kemet.base.css';
+
+@mixin light-vars {
+  --app-color: rgb(var(--kemet-color-stone-900));
+  --app-border-color: rgb(var(--kemet-color-black) / 50%);
+  --app-background-color: rgb(var(--kemet-color-stone-200));
+}
+
+:root {
+  --app-page-width: 1280px;
+  --app-color: rgb(var(--kemet-color-gray-100));
+  --app-link-color: rgb(var(--kemet-color-sky-600));
+  --app-border: 1px solid var(--app-border-color);
+  --app-border-color: rgb(var(--kemet-color-white) / 25%);
+  --app-background-color: rgb(var(--kemet-color-gray-900));
+  --app-card-background-color: rgb(var(--kemet-color-black) / 25%);
+  --app-input-filled-background-color: rgb(var(--kemet-color-black) / 25%);
+  --app-primary-color: rgb(var(--kemet-color-primary));
+  --app-error-color: rgb(var(--kemet-color-red-600));
+
+  --kemet-color-text: var(--app-color);
+  --kemet-color-primary: var(--kemet-color-sky-600);
+
+  @media (prefers-color-scheme: light) {
+    @include light-vars();
+  }
+}
+
+[polarity="light"] {
+  @include light-vars();
+}
+
+html {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+
+  color: var(--app-color);
+  background-color: var(--app-background-color);
+  margin: 0;
+  padding: 0;
+
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: var(--app-link-color)
+}
