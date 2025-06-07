@@ -1,9 +1,9 @@
 import { LitElement, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { svgLogo } from '../../shared/svgs';
-import userStore, { IUserStore } from '../../store/user';
-import quoteStore, { IQuoteStore } from '../../store/quote';
-import appStore, { IAppStore } from '../../store/app';
+import userStore, { type IUserStore } from '../../store/user';
+import quoteStore, { type IQuoteStore } from '../../store/quote';
+import appStore, { type IAppStore } from '../../store/app';
 import { switchRoute } from '../../shared/utilities';
 
 import styles from './styles';
@@ -14,7 +14,7 @@ import '../ani-search/search';
 
 @customElement('ani-top-nav')
 export default class AniTopNav extends LitElement {
-  static styles = [styles, sharedStyles];
+  static styles = [sharedStyles, styles];
 
   @property({ type: Boolean, reflect: true })
   loading: boolean = false;
@@ -67,6 +67,7 @@ export default class AniTopNav extends LitElement {
   }
 
   makeProfileImage() {
+    console.log(this.appState);
     const profileImage = this.userState.profile?.avatar?.url;
     const isLoginPage = this.appState.currentRoute.includes('login');
 
@@ -83,9 +84,9 @@ export default class AniTopNav extends LitElement {
 
     if (!isLoginPage) {
       return html`
-        <button @click=${() => switchRoute('/login')} aria-label="Login">
+        <a href="/login">
           <kemet-icon icon="door-open" size="24"></kemet-icon>
-        </button>
+        </a>
       `;
     }
 

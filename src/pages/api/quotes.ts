@@ -6,7 +6,7 @@ const supabase = createClient(`https://ywdityiebxhhjfmspwwk.supabase.co`, proces
 export const prerender = false;
 
 export const GET: APIRoute = async ({ request }) => {
-  // const data = await request.json();
+  const data = await request.json();
   // const { message, email, phone, user } = data;
 
   try {

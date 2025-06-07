@@ -1,8 +1,8 @@
 import { LitElement, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
-import modalsStore, { IModalsStore } from '../../store/modals';
-import userStore, { IUserStore } from '../../store/user';
-import quoteStore, { IQuoteStore } from '../../store/quote';
+import modalsStore, { type IModalsStore } from '../../store/modals';
+import userStore, { type IUserStore } from '../../store/user';
+import quoteStore, { type IQuoteStore } from '../../store/quote';
 import styles from './styles';
 
 import '../ani-feed/feed';
@@ -26,7 +26,6 @@ export default class AniHome extends LitElement {
 
   constructor() {
     super();
-    document.title = 'Ani Book Quotes';
     userStore.subscribe((state) => {
       this.userState = state;
     });

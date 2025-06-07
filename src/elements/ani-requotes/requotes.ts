@@ -1,8 +1,8 @@
 import { LitElement, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { IQuote } from '../../shared/interfaces';
-import userStore, { IUserStore } from '../../store/user';
-import modalsStore, { IModalsStore } from '../../store/modals';
+import { type IQuote } from '../../shared/interfaces';
+import userStore, { type IUserStore } from '../../store/user';
+import modalsStore, { type IModalsStore } from '../../store/modals';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
 

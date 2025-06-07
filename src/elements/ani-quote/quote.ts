@@ -1,8 +1,8 @@
 import { LitElement, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { IQuote } from '../../shared/interfaces';
+import { type IQuote } from '../../shared/interfaces';
 import { formatDistance } from 'date-fns';
-import userStore, { IUserStore } from '../../store/user';
+import userStore, { type IUserStore } from '../../store/user';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
 

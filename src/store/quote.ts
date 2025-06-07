@@ -1,5 +1,5 @@
 import { createStore } from 'zustand/vanilla';
-import { IComment, IQuote } from '../shared/interfaces';
+import { type IComment, type IQuote } from '../shared/interfaces';
 
 export interface IQuoteStore {
   searchQuery: string;

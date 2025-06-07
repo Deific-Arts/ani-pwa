@@ -1,7 +1,7 @@
 import { createStore } from 'zustand/vanilla';
 import Cookies from 'js-cookie';
 import appStore from '../store/app';
-import { IProfile, IUserCookie } from '../shared/interfaces';
+import { type IProfile, type IUserCookie } from '../shared/interfaces';
 
 export interface IUserStore {
   user: IUserCookie;

@@ -14,6 +14,10 @@ export default  css`
     background: var(--app-background-color);
   }
 
+  a {
+    color: var(--app-text-color);
+  }
+
   svg {
     width: 56px;
   }

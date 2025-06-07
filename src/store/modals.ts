@@ -1,5 +1,5 @@
 import { createStore } from 'zustand/vanilla';
-import { IQuote } from '../shared/interfaces';
+import { type IQuote } from '../shared/interfaces';
 
 export interface IModalsStore {
   signInOpened: boolean;

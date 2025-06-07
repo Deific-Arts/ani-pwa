@@ -1,9 +1,9 @@
 
 import { LitElement, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import userStore, { IUserStore } from '../../store/user.ts';
-import modalsStore, { IModalsStore } from '../../store/modals.ts';
-import { IComment, IQuote } from '../../shared/interfaces';
+import userStore, { type IUserStore } from '../../store/user.ts';
+import modalsStore, { type IModalsStore } from '../../store/modals.ts';
+import { type IComment, type IQuote } from '../../shared/interfaces';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
 

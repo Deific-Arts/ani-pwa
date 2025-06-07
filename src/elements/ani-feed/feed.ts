@@ -1,8 +1,8 @@
 import { LitElement, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import quoteStore, { IQuoteStore } from '../../store/quote';
-import userStore, { IUserStore } from '../../store/user';
-import appStore, { IAppStore } from '../../store/app';
+import quoteStore, { type IQuoteStore } from '../../store/quote';
+import userStore, { type IUserStore } from '../../store/user';
+import appStore, { type IAppStore } from '../../store/app';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
 

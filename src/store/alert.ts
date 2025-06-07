@@ -1,4 +1,4 @@
-import { DirectiveResult } from 'lit/async-directive.js';
+import type { DirectiveResult } from 'lit/async-directive.js';
 import { UnsafeHTMLDirective } from 'lit/directives/unsafe-html.js';
 import { createStore } from 'zustand/vanilla';
 

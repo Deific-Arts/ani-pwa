@@ -6,12 +6,15 @@ const { heading, description } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={heading} description={description} />
-	</head>
+<html lang="en-us">
+	<BaseHead title={heading} description={description} />
 	<body>
-		<slot />
+    <ani-layout>
+      <div>
+        <ani-top-nav></ani-top-nav>
+				<main><slot /></main>
+      </div>
+    </ani-layout>
     <Footer />
 	</body>
 </html>
