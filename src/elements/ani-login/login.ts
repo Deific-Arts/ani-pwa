@@ -82,9 +82,9 @@ export default class aniLogin extends LitElement {
           <kemet-tab slot="tab">Register</kemet-tab>
           <kemet-tab slot="tab">Forgot Password</kemet-tab>
           <kemet-tab-panel slot="panel">
-            <form method="post" action="api/auth/local" @submit=${(event: SubmitEvent) => this.handleLogin(event)}>
+            <form method="post" action="api/auth/login" @submit=${(event: SubmitEvent) => this.handleLogin(event)}>
               <p>
-                <kemet-field label="Username">
+                <kemet-field label="Email">
                   <kemet-input required slot="input" name="identifier" rounded validate-on-blur></kemet-input>
                 </kemet-field>
               </p>
@@ -119,7 +119,7 @@ export default class aniLogin extends LitElement {
             </form>
           </kemet-tab-panel>
           <kemet-tab-panel slot="panel">
-            <form method="post" action="api/auth/local/register" @submit=${(event: SubmitEvent) => this.handleRegistration(event)}>
+            <form method="post" action="api/auth/register" @submit=${(event: SubmitEvent) => this.handleRegistration(event)}>
               <kemet-field slug="username" label="Username" message="A valid username is required">
                 <kemet-input required slot="input" name="username" validate-on-blur></kemet-input>
               </kemet-field>
@@ -202,31 +202,20 @@ export default class aniLogin extends LitElement {
 
     const endpoint = this.loginForm.getAttribute('action');
 
-    fetch(`${API_URL}/${endpoint}`, options)
+    fetch(`/${endpoint}`, options)
       .then(response => response.json())
       .then(async response => {
         // bad access
-        if (response.error?.status === 400) {
+        if (response.error) {
           this.alertState.setStatus('error');
-          this.alertState.setMessage(unsafeHTML('Oh boy, looks like a bad username or password.'));
+          this.alertState.setMessage(unsafeHTML(response.message));
           this.alertState.setOpened(true);
           this.alertState.setIcon('exclamation-circle');
+          return;
         }
 
         // success
-        if (response.jwt) {
-          const options = {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${response.jwt}`
-            }
-          };
-          const userProfile = await fetch(`${API_URL}/api/users/me?populate=*`, options).then((response) => response.json());
-          this.userState.updateProfile(userProfile);
-          this.userState.login(response);
-          window.location.href = '/';
-        }
+        window.location.href = '/';
       })
       // .catch(() => {
       //   this.alertState.setStatus('error');
@@ -252,14 +241,12 @@ export default class aniLogin extends LitElement {
 
     const endpoint = this.registerForm.getAttribute('action');
 
-    fetch(`${API_URL}/${endpoint}`, options)
+    fetch(`/${endpoint}`, options)
       .then(response => response.json())
       .then((responseData) => {
-          // this.alertState.setMessage('An error was encountered while registering.');
-
           if (responseData.error) {
             this.alertState.setStatus('error');
-            this.alertState.setMessage(responseData.error.message);
+            this.alertState.setMessage(responseData.message);
             this.alertState.setOpened(true);
             this.alertState.setIcon('exclamation-circle');
           }
@@ -272,12 +259,10 @@ export default class aniLogin extends LitElement {
 
             this.alertState.setStatus(ENUM_ALERT_STATUS.PRIMARY);
             this.alertState.setOpened(true);
-            this.alertState.setMessage('You\'re all set!');
+            this.alertState.setMessage('Check your email for a confirmation link.');
 
             this.fetchLogin(credentials);
           }
-
-
       })
       .catch(() => {
         this.alertState.setStatus(ENUM_ALERT_STATUS.ERROR);
@@ -398,7 +383,7 @@ export default class aniLogin extends LitElement {
       };
       const userProfile = await fetch(`${API_URL}/api/users/me?populate=*`, options).then((response) => response.json());
       this.userState.updateProfile(userProfile);
-      this.userState.login(response);
+      // this.userState.login(response);
       window.location.href = '/';
     }
   }

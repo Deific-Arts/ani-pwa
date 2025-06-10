@@ -7,9 +7,9 @@ export interface IUserStore {
   user: IUserCookie;
   profile: IProfile;
   updateProfile: (profile: IProfile) => void;
-  isLoggedIn: boolean;
-  login: (loginData: IUserCookie) => void;
-  logout: () => void;
+  isLoggedIn: () => Promise<boolean>;
+  // login: (loginData: IUserCookie) => void;
+  // logout: () => void;
 }
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -50,15 +50,31 @@ const store = createStore<IUserStore>(set => ({
   user: Cookies.get('ani-user') ? JSON.parse(Cookies.get('ani-user') || '') : {},
   profile: profileResponse,
   updateProfile: (profile: IProfile) => set(() => { return { profile } }),
-  isLoggedIn: !!Cookies.get('ani-user'),
-  login: (loginData) => set(() => {
-    Cookies.set('ani-user', JSON.stringify(loginData), { expires: 7 });
-    return { isLoggedIn: true, user: loginData };
-  }),
-  logout: () => set(() => {
-    Cookies.remove('ani-user');
-    return { isLoggedIn: false };
-  })
+  // isLoggedIn: !!Cookies.get('ani-user'),
+  // login: (loginData) => set(() => {
+  //   console.log(loginData.user);
+  //   Cookies.set('ani-user', JSON.stringify(loginData.user), { expires: 7 });
+  //   return { isLoggedIn: true, user: loginData };
+  // }),
+  // logout: () => set(() => {
+  //   Cookies.remove('ani-user');
+  //   return { isLoggedIn: false };
+  // }),
+  isLoggedIn: async () => {
+    const isAuthCookie = Cookies.get('ani-authorized');
+    if (isAuthCookie) return true;
+
+    const authorizedResponse = await fetch('/api/auth/authorized');
+    if (authorizedResponse.ok) {
+      const data = await authorizedResponse.json();
+      if (data) {
+        Cookies.set('ani-authorized', JSON.stringify(data));
+        return true;
+      }
+    }
+
+    return false;
+  }
 }));
 
 export default store;

@@ -66,12 +66,11 @@ export default class AniTopNav extends LitElement {
     `
   }
 
-  makeProfileImage() {
-    console.log(this.appState);
+  async makeProfileImage() {
     const profileImage = this.userState.profile?.avatar?.url;
     const isLoginPage = this.appState.currentRoute.includes('login');
 
-    if (this.userState.isLoggedIn) {
+    if (await this.userState.isLoggedIn()) {
       return html`
         <button @click=${() => switchRoute('/profile')} aria-label="Profile Avatar">
           ${profileImage
