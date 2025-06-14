@@ -110,9 +110,9 @@ export default class AniQuote extends LitElement {
   deleteQuote() {
     fetch(`${API_URL}/api/quotes/${this.quote.documentId}`, {
       method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${this.userState.user.jwt}`
-      }
+      // headers: {
+      //   Authorization: `Bearer ${this.userState.user.jwt}`
+      // }
     });
 
     if (this.isSingle) {

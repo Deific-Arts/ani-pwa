@@ -5,7 +5,7 @@ import Autolinker from 'autolinker';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import { switchRoute } from '../../shared/utilities';
-import { IBook, IQuote, IUser } from '../../shared/interfaces';
+import { IBook, IQuote, IProfile } from '../../shared/interfaces';
 import userStore, { IUserStore } from '../../store/user';
 import sharedStyles from '../../shared/styles';
 import styles from './styles';
@@ -21,7 +21,7 @@ export default class AniUserView extends LitElement {
   static styles = [styles, sharedStyles];
 
   @property()
-  user!: IUser;
+  user!: IProfile;
 
   @property()
   userId: string = '';
@@ -119,7 +119,7 @@ export default class AniUserView extends LitElement {
   async getFollowers() {
     const response = await fetch(`${API_URL}/api/users`);
     const responseData = await response.json();
-    this.followers = responseData.filter((user: IUser) => user.following?.includes(this.user.id)).length;
+    this.followers = responseData.filter((user: IProfile) => user.following?.includes(this.user.id)).length;
   }
 
   makeBooks() {

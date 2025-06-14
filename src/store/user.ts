@@ -4,7 +4,7 @@ import appStore from '../store/app';
 import { type IProfile, type IUserCookie } from '../shared/interfaces';
 
 export interface IUserStore {
-  user: IUserCookie;
+  // user: IUserCookie;
   profile: IProfile;
   updateProfile: (profile: IProfile) => void;
   isLoggedIn: boolean;
@@ -63,7 +63,7 @@ const profileResponse = await getProfile();
 const isLoggedInResponse = await isLoggedIn();
 
 const store = createStore<IUserStore>(set => ({
-  user: Cookies.get('ani-user') ? JSON.parse(Cookies.get('ani-user') || '') : {},
+  // user: Cookies.get('ani-user') ? JSON.parse(Cookies.get('ani-user') || '') : {},
   profile: profileResponse,
   updateProfile: (profile: IProfile) => set(() => { return { profile } }),
   // isLoggedIn: !!Cookies.get('ani-user'),

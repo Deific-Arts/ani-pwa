@@ -31,7 +31,7 @@ export default class AniLike extends LitElement {
   firstUpdated() {
     if (this.quote) {
       this.likes = this.quote.likes.length;
-      if (this.userState.isLoggedIn) this.liked = this.quote.likes.includes(this.userState.user.user.id);
+      if (this.userState.isLoggedIn) this.liked = this.quote.likes.includes(this.userState.profile.id);
     }
   }
 
@@ -53,11 +53,11 @@ export default class AniLike extends LitElement {
       const likes = latestQuoteResponse.data.likes || [];
 
       const addLike = {
-        likes: [...likes, this.userState.user.user.id]
+        likes: [...likes, this.userState.profile.id]
       };
 
       const removeLike = {
-        likes: [...likes.filter((like: number) => like !== this.userState.user.user.id)]
+        likes: [...likes.filter((like: number) => like !== this.userState.profile.id)]
       }
 
       const likeRequestBody = this.liked ? removeLike : addLike;

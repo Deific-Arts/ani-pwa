@@ -1,6 +1,6 @@
-import { IQuote, IUser } from "../../shared/interfaces";
+import { IQuote, IProfile } from "../../shared/interfaces";
 
-export const fixtureUser: IUser = {
+export const fixtureUser: IProfile = {
   "id": 1,
   "documentId": "w6ib29qyx67t6f0wcvbmry9d",
   "username": "OgdoadPantheon",

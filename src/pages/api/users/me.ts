@@ -19,9 +19,8 @@ export const GET: APIRoute = async ({ request }) => {
         .single();
 
       if (data) {
-        const userData = { user: session.user.user_metadata, profile: data };
         return new Response(
-          JSON.stringify(userData),
+          JSON.stringify(data),
           { status: 200 }
         );
       }

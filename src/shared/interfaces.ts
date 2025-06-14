@@ -12,7 +12,7 @@ export interface IQuote {
   note: string;
   private: boolean;
   comments?: IComment[];
-  user: IUser;
+  user: IProfile;
   book: IBook;
   // author: any;
 }
@@ -25,7 +25,7 @@ export interface IComment {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
-  user: IUser;
+  user: IProfile;
 }
 
 export interface IBook {
@@ -49,6 +49,14 @@ export interface IGoogleBook {
 }
 
 export interface IUser {
+  email: string;
+  email_verified: boolean;
+  phone_verified: boolean;
+  sub: string;
+  username: string;
+}
+
+export interface IProfile {
   id: number;
   documentId?: string;
   username: string;
@@ -70,7 +78,7 @@ export interface IUser {
   memberFreePass?: boolean;
 }
 
-export interface IProfile extends IUser {}
+// export interface IProfile extends IUser {}
 
 export interface IRole {
   id: number;
@@ -106,8 +114,8 @@ export interface IAvatar {
 }
 
 export interface IUserCookie {
-  jwt: string;
   user: IUser;
+  profile: IProfile;
 }
 
 export interface IPagination {
