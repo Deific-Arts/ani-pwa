@@ -4,7 +4,6 @@ import { svgLogo } from '../../shared/svgs';
 import userStore, { type IUserStore } from '../../store/user';
 import quoteStore, { type IQuoteStore } from '../../store/quote';
 import appStore, { type IAppStore } from '../../store/app';
-import { switchRoute } from '../../shared/utilities';
 
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
@@ -45,6 +44,7 @@ export default class AniTopNav extends LitElement {
   }
 
   render() {
+    console.log(this.userState.profile);
     return html`
       ${this.appState.currentRoute.includes('home') || this.appState.currentRoute === '/'
         ? html`<ani-search ?opened=${this.appState.isDrawerOpened}></ani-search>`
@@ -60,24 +60,24 @@ export default class AniTopNav extends LitElement {
             ` : null
           }
         </nav>
-        <button aria-label="Home" @click=${() => switchRoute('/home')}>${svgLogo}</button>
+        <a href="/" aria-label="Home">${svgLogo}</a>
         <div>${this.makeProfileImage()}</div>
       </section>
     `
   }
 
-  async makeProfileImage() {
+  makeProfileImage() {
     const profileImage = this.userState.profile?.avatar?.url;
     const isLoginPage = this.appState.currentRoute.includes('login');
 
-    if (await this.userState.isLoggedIn()) {
+    if (this.userState.isLoggedIn) {
       return html`
-        <button @click=${() => switchRoute('/profile')} aria-label="Profile Avatar">
+        <a href="/profile" aria-label="Profile Avatar">
           ${profileImage
             ? html`<img src="${profileImage}" alt="${this.userState.profile.username}" />`
             : html`<img src="https://placehold.co/80x80?text=${this.userState.profile.username}" alt="${this.userState.profile.username}" />`
           }
-        </button>
+        </a>
       `
     }
 

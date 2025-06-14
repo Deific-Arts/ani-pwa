@@ -1,7 +1,6 @@
 import type { APIRoute } from "astro";
 import 'dotenv/config'
 import { supabase } from "../../../shared/database";
-import { notEqual } from "lit";
 
 export const prerender = false;
 

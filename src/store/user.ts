@@ -7,7 +7,7 @@ export interface IUserStore {
   user: IUserCookie;
   profile: IProfile;
   updateProfile: (profile: IProfile) => void;
-  isLoggedIn: () => Promise<boolean>;
+  isLoggedIn: boolean;
   // login: (loginData: IUserCookie) => void;
   // logout: () => void;
 }
@@ -15,22 +15,21 @@ export interface IUserStore {
 const API_URL = import.meta.env.VITE_API_URL;
 
 const getProfile = async () => {
-  const user = Cookies.get('ani-user') ? JSON.parse(Cookies.get('ani-user') || '') : undefined;
+  // const user = Cookies.get('ani-user') ? JSON.parse(Cookies.get('ani-user') || '') : undefined;
 
-  if (!user) {
-    return;
-  }
+  // if (!user) {
+  //   return;
+  // }
 
   const options = {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${user.jwt}`
     }
   };
 
   try {
-    const userProfile = await fetch(`${API_URL}/api/users/me?populate=*`, options)
+    const userProfile = await fetch(`/api/users/me`, options)
       .then((response) => response.json());
     if (userProfile) {
       return userProfile;
@@ -44,7 +43,24 @@ const getProfile = async () => {
   return;
 }
 
+const isLoggedIn = async () => {
+  const isAuthCookie = Cookies.get('ani-authorized');
+  if (isAuthCookie) return true;
+
+  const authorizedResponse = await fetch('/api/auth/authorized');
+  if (authorizedResponse.ok) {
+    const data = await authorizedResponse.json();
+    if (data) {
+      Cookies.set('ani-authorized', JSON.stringify(data));
+      return true;
+    }
+  }
+
+  return false;
+}
+
 const profileResponse = await getProfile();
+const isLoggedInResponse = await isLoggedIn();
 
 const store = createStore<IUserStore>(set => ({
   user: Cookies.get('ani-user') ? JSON.parse(Cookies.get('ani-user') || '') : {},
@@ -60,21 +76,7 @@ const store = createStore<IUserStore>(set => ({
   //   Cookies.remove('ani-user');
   //   return { isLoggedIn: false };
   // }),
-  isLoggedIn: async () => {
-    const isAuthCookie = Cookies.get('ani-authorized');
-    if (isAuthCookie) return true;
-
-    const authorizedResponse = await fetch('/api/auth/authorized');
-    if (authorizedResponse.ok) {
-      const data = await authorizedResponse.json();
-      if (data) {
-        Cookies.set('ani-authorized', JSON.stringify(data));
-        return true;
-      }
-    }
-
-    return false;
-  }
+  isLoggedIn: isLoggedInResponse
 }));
 
 export default store;
