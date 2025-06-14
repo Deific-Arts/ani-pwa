@@ -1,8 +1,8 @@
 import { LitElement, html } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
-import userStore, { IUserStore } from '../../store/user.ts';
-import alertStore, { IAlertStore } from '../../store/alert.ts';
-import modalsStore, { IModalsStore } from '../../store/modals.ts';
+import userStore, { type IUserStore } from '../../store/user.ts';
+import alertStore, { type IAlertStore } from '../../store/alert.ts';
+import modalsStore, { type IModalsStore } from '../../store/modals.ts';
 import { informationStyles } from './styles.ts';
 import sharedStyles from '../../shared/styles.ts';
 
@@ -14,8 +14,8 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import FilePondPluginImageCrop from 'filepond-plugin-image-crop';
 import FilePondPluginImageResize from 'filepond-plugin-image-resize';
 import FilePondPluginImageTransform from 'filepond-plugin-image-transform';
-import FilePondStyles from 'filepond/dist/filepond.min.css';
-import FilePondImagePreviewStyles from 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import FilePondStyles from 'filepond/dist/filepond.min.css?raw';
+import FilePondImagePreviewStyles from 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css?raw';
 import { switchRoute } from '../../shared/utilities.ts';
 
 
@@ -32,7 +32,7 @@ FilePond.registerPlugin(
 );
 
 @customElement('ani-information')
-export default class aniInformation extends LitElement {
+export default class AniInformation extends LitElement {
   static styles = [sharedStyles, informationStyles, FilePondStyles, FilePondImagePreviewStyles];
 
   @state()
@@ -296,6 +296,6 @@ export default class aniInformation extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'ani-information': aniInformation
+    'ani-information': AniInformation
   }
 }

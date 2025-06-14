@@ -2,8 +2,8 @@ import { LitElement, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import styles from './styles.ts';
 import sharedStyles from '../../shared/styles.ts';
-import userStore,{ IUserStore } from '../../store/user.ts';
-import { IBook, IGoogleBook } from '../../shared/interfaces.ts';
+import userStore,{ type IUserStore } from '../../store/user.ts';
+import { type IBook, type IGoogleBook } from '../../shared/interfaces.ts';
 
 const API_URL = import.meta.env.VITE_API_URL;
 

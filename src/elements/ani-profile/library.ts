@@ -1,8 +1,8 @@
 import { LitElement, html } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
-import userStore, { IUserStore } from '../../store/user.ts';
+import userStore, { type IUserStore } from '../../store/user.ts';
 import { libraryStyles } from './styles.ts';
-import { IBook } from '../../shared/interfaces.ts';
+import { type IBook } from '../../shared/interfaces.ts';
 import KemetInput from 'kemet-ui/dist/components/kemet-input/kemet-input';
 import sharedStyles from '../../shared/styles.ts';
 

@@ -1,7 +1,7 @@
 import { LitElement, html } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
-import userStore, { IUserStore } from '../../store/user.ts';
-import alertStore, { IAlertStore } from '../../store/alert.ts';
+import userStore, { type IUserStore } from '../../store/user.ts';
+import alertStore, { type IAlertStore } from '../../store/alert.ts';
 import { ENUM_ALERT_STATUS } from '../../shared/enums.ts';
 import sharedStyles from '../../shared/styles.ts';
 
