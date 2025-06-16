@@ -1,9 +1,9 @@
-import { LitElement, html } from 'lit';
+import { LitElement, html, css } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import userStore, { type IUserStore } from '../../store/user.ts';
 import alertStore, { type IAlertStore } from '../../store/alert.ts';
 import modalsStore, { type IModalsStore } from '../../store/modals.ts';
-import { informationStyles } from './styles.ts';
+import { filepondImagePreviewStyles, filepondStyles, informationStyles } from './styles.ts';
 import sharedStyles from '../../shared/styles.ts';
 
 import * as FilePond from 'filepond';
@@ -14,8 +14,6 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import FilePondPluginImageCrop from 'filepond-plugin-image-crop';
 import FilePondPluginImageResize from 'filepond-plugin-image-resize';
 import FilePondPluginImageTransform from 'filepond-plugin-image-transform';
-import FilePondStyles from 'filepond/dist/filepond.min.css?raw';
-import FilePondImagePreviewStyles from 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css?raw';
 import { switchRoute } from '../../shared/utilities.ts';
 
 
@@ -33,7 +31,7 @@ FilePond.registerPlugin(
 
 @customElement('ani-information')
 export default class AniInformation extends LitElement {
-  static styles = [sharedStyles, informationStyles, FilePondStyles, FilePondImagePreviewStyles];
+  static styles = [sharedStyles, informationStyles, filepondStyles, filepondImagePreviewStyles];
 
   @state()
   userState: IUserStore = userStore.getInitialState();
@@ -189,7 +187,7 @@ export default class AniInformation extends LitElement {
 
     const endpoint = this.userForm.getAttribute('action');
 
-    const profile = await fetch(`${API_URL}/${endpoint}/${this.userState.user.user.id}`, options)
+    const profile = await fetch(`${API_URL}/${endpoint}/${this.userState.profile.id}`, options)
       .then((response) => response.json())
       .catch((error) => console.error(error));
 
@@ -233,7 +231,7 @@ export default class AniInformation extends LitElement {
         body: JSON.stringify({ avatar })
       };
 
-      await fetch(`${API_URL}/${endpoint}/${this.userState.user.user.id}`, avatarOptions)
+      await fetch(`${API_URL}/${endpoint}/${this.userState.profile.id}`, avatarOptions)
         .then((response) => response.json())
         .catch((error) => console.error(error));
     }
@@ -255,7 +253,7 @@ export default class AniInformation extends LitElement {
       })
     }
 
-    await fetch(`${API_URL}/api/users/${this.userState.user.user.id}`, options);
+    await fetch(`${API_URL}/api/users/${this.userState.profile.id}`, options);
 
     const deleteOptions = {
       method: 'DELETE',

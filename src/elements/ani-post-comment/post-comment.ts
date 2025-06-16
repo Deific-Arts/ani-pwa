@@ -1,13 +1,13 @@
 
 import { LitElement, html } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
-import userStore, { IUserStore } from '../../store/user.ts';
-import modalsStore, { IModalsStore } from '../../store/modals.ts';
-import alertStore, { IAlertStore } from '../../store/alert.ts';
+import userStore, { type IUserStore } from '../../store/user.ts';
+import modalsStore, { type IModalsStore } from '../../store/modals.ts';
+import alertStore, { type IAlertStore } from '../../store/alert.ts';
 import { ENUM_ALERT_STATUS } from '../../shared/enums.ts';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
-import quoteStore, { IQuoteStore } from '../../store/quote.ts';
+import quoteStore, { type IQuoteStore } from '../../store/quote.ts';
 import 'kemet-ui/dist/components/kemet-field/kemet-field';
 import 'kemet-ui/dist/components/kemet-textarea/kemet-textarea';
 import 'kemet-ui/dist/components/kemet-count/kemet-count';

@@ -1,11 +1,11 @@
 import { LitElement, html } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
-import modalsStore, { IModalsStore } from '../../store/modals';
-import quoteStore, { IQuoteStore } from '../../store/quote';
-import userStore,{ IUserStore } from '../../store/user';
-import { IBook } from '../../shared/interfaces';
+import modalsStore, { type IModalsStore } from '../../store/modals';
+import quoteStore, { type IQuoteStore } from '../../store/quote';
+import userStore,{ type IUserStore } from '../../store/user';
+import { type IBook } from '../../shared/interfaces';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
-import alertStore, { IAlertStore } from '../../store/alert';
+import alertStore, { type IAlertStore } from '../../store/alert';
 import KemetSelect from 'kemet-ui/dist/components/kemet-select/kemet-select';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';

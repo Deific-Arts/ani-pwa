@@ -1,4 +1,6 @@
 import { css } from 'lit';
+import FilePondStyles from 'filepond/dist/filepond.min.css?raw';
+import FilePondImagePreviewStyles from 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css?raw';
 
 export const informationStyles = css`
   :host {
@@ -110,3 +112,7 @@ export const libraryStyles = css`
     }
   }
 `;
+
+export const filepondStyles = css`FilePondStyles`;
+export const filepondImagePreviewStyles = css`FilePondImagePreviewStyles`;
+
