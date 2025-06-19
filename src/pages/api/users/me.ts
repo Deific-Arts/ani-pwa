@@ -11,34 +11,34 @@ export const GET: APIRoute = async ({ request }) => {
       error
     } = await supabase.auth.getSession();
 
-    if (session) {
-      const { data: profile, error: profileError } = await supabase
-        .from('Profiles')
-        .select('*')
-        .eq('uuid', session.user.id)
-        .single();
-
-      const { data: books, error: booksError } = await supabase
-        .from('Books')
-        .select('*')
-        .in('id', profile.book_ids);
-
-      if (profile && books) {
-        const data = { ...profile, books };
-        return new Response(
-          JSON.stringify(data),
-          { status: 200 }
-        );
-      }
-
+    if (!session) {
       return new Response(
-        JSON.stringify({ success: false, message: "Failed to get profile.", errors: { profileError, booksError } }),
+        JSON.stringify({ success: false, message: "You are not logged in." }),
         { status: 400 }
       );
     }
 
+    const { data: profile, error: profileError } = await supabase
+      .from('Profiles')
+      .select('*')
+      .eq('uuid', session.user.id)
+      .single();
+
+    const { data: books, error: booksError } = await supabase
+      .from('Books')
+      .select('*')
+      .in('id', profile.book_ids);
+
+    if (profile && books) {
+      const data = { ...profile, books };
+      return new Response(
+        JSON.stringify(data),
+        { status: 200 }
+      );
+    }
+
     return new Response(
-      JSON.stringify({ success: false, message: "Failed to get user.", error }),
+      JSON.stringify({ success: false, message: "Failed to get profile.", errors: { profileError, booksError } }),
       { status: 400 }
     );
   } catch(error) {

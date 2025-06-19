@@ -43,21 +43,7 @@ const getProfile = async () => {
   return;
 }
 
-const isLoggedIn = async () => {
-  const isAuthCookie = Cookies.get('ani-authorized');
-  if (isAuthCookie) return true;
-
-  const authorizedResponse = await fetch('/api/auth/authorized');
-  if (authorizedResponse.ok) {
-    const data = await authorizedResponse.json();
-    if (data) {
-      Cookies.set('ani-authorized', JSON.stringify(data));
-      return true;
-    }
-  }
-
-  return false;
-}
+const isLoggedIn = async () => await fetch('/api/auth/authorized').then(response => response.json());
 
 const profileResponse = await getProfile();
 const isLoggedInResponse = await isLoggedIn();
