@@ -59,7 +59,7 @@ export default class aniBook extends LitElement {
   }
 
   async fetchBook() {
-    const response = await fetch(`https://www.googleapis.com/books/v1/volumes/${this.identifier}?key=${import.meta.env.VITE_BOOKS_API_KEY}`);
+    const response = await fetch(`/api/google/books/details?identifier=${this.identifier}`);
     const bookData = await response.json();
     this.book = !bookData.error ? bookData : undefined;
   }

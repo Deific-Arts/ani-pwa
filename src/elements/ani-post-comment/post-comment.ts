@@ -44,7 +44,6 @@ export default class AniPostComment extends LitElement {
   }
 
   render() {
-    console.log(this.userState);
     const isMember = this.userState.profile.member_free_pass || !!this.userState.profile.member_id;
 
     if (isMember) {

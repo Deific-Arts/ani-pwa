@@ -91,7 +91,7 @@ export default class AniQuote extends LitElement {
 
   displayDate() {
     const now = new Date();
-    const then = new Date(this.quote.createdAt);
+    const then = new Date(this.quote.created_at);
     return formatDistance(now, then);
   }
 

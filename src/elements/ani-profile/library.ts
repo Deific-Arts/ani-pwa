@@ -68,7 +68,7 @@ export default class aniLibrary extends LitElement {
 
   async fetchBooks() {
     if (this.search.value) {
-      const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${this.search.value}&key=${import.meta.env.VITE_BOOKS_API_KEY}`);
+      const response = await fetch(`/api/google/books/search?search=${this.search.value}`);
       const { items } = await response.json();
       this.hasSearch = true;
       this.books = items;

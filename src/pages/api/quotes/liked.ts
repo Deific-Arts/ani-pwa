@@ -21,7 +21,7 @@ export const GET: APIRoute = async ({ request }) => {
       .from('Quotes')
       .select(`
         id,
-        createdAt:created_at,
+        created_at,
         quote,
         requote,
         page,

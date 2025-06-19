@@ -5,7 +5,7 @@ export const fixtureQuote: IQuote = {
   "documentId": "enakof8wjf8l8pczzmkukfmo",
   "quote": "In the representation of the Zodiac in the Temple of Denderah (in Egypt) the figure of Virgo is annotated by a smaller figure of Isis with Horus in her arms; and the Roman Church fixed the celebration of Mary’s assumption into the glory at the very date ",
   "likes": [],
-  "createdAt": "2024-12-25T19:24:22.468Z",
+  "created_at": "2024-12-25T19:24:22.468Z",
   "updatedAt": "2024-12-25T19:24:22.468Z",
   "publishedAt": "2024-12-25T19:24:22.465Z",
   "page": "14",

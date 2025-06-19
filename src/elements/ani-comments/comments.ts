@@ -42,7 +42,6 @@ export default class AniComments extends LitElement {
   async getComments() {
     const commentsRequest = await fetch(`/api/comments?quoteId=${this.quote?.id}`);
     this.comments = await commentsRequest.json();
-    console.log(this.comments);
   }
 
   openComment() {

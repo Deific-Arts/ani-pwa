@@ -3,7 +3,7 @@ export interface IQuote {
   documentId: string;
   quote: string;
   likes: number[];
-  createdAt: string;
+  created_at: string;
   updatedAt: string;
   publishedAt: string;
   requote: string | null;
@@ -22,18 +22,18 @@ export interface IComment {
   quoteId: number;
   documentId: string;
   comment: string;
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
+  created_at: string;
+  updated_at: string;
+  published_at: string;
   user: IProfile;
 }
 
 export interface IBook {
   id: number;
   documentId: string;
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
+  created_at: string;
+  updated_at: string;
+  published_at: string;
   title: string;
   identifier: string;
 }
@@ -85,9 +85,9 @@ export interface IRole {
   name: string;
   description: string;
   type: string;
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
+  created_at: string;
+  updated_at: string;
+  published_at: string;
 }
 
 export interface IAvatar {
@@ -107,9 +107,9 @@ export interface IAvatar {
   previewUrl: string | null,
   provider: string;
   provider_metadata: string | null,
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
+  created_at: string;
+  updated_at: string;
+  published_at: string;
 }
 
 export interface IUserCookie {

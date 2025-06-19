@@ -12,13 +12,19 @@ export const GET: APIRoute = async ({ request }) => {
     } = await supabase.auth.getSession();
 
     if (session) {
-      const { data, error } = await supabase
+      const { data: profile, error: profileError } = await supabase
         .from('Profiles')
         .select('*')
         .eq('uuid', session.user.id)
         .single();
 
-      if (data) {
+      const { data: books, error: booksError } = await supabase
+        .from('Books')
+        .select('*')
+        .in('id', profile.book_ids);
+
+      if (profile && books) {
+        const data = { ...profile, books };
         return new Response(
           JSON.stringify(data),
           { status: 200 }
@@ -26,7 +32,7 @@ export const GET: APIRoute = async ({ request }) => {
       }
 
       return new Response(
-        JSON.stringify({ success: false, message: "Failed to get profile.", error }),
+        JSON.stringify({ success: false, message: "Failed to get profile.", errors: { profileError, booksError } }),
         { status: 400 }
       );
     }

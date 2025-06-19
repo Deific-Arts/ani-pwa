@@ -44,7 +44,6 @@ export default class AniTopNav extends LitElement {
   }
 
   render() {
-    console.log(this.userState.profile);
     return html`
       ${this.appState.currentRoute.includes('home') || this.appState.currentRoute === '/'
         ? html`<ani-search ?opened=${this.appState.isDrawerOpened}></ani-search>`
