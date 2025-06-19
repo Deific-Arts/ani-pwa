@@ -58,24 +58,23 @@ export interface IUser {
 
 export interface IProfile {
   id: number;
-  documentId?: string;
   username: string;
   email: string;
   provider: string;
   confirmed: boolean;
   blocked: boolean;
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
-  firstName: string;
-  lastName: string;
+  created_at: string;
+  updated_at: string;
+  published_at: string;
+  first_name: string;
+  last_name: string;
   bio: string;
   following: number[],
   role?: IRole;
   books?: IBook[];
   avatar: IAvatar;
-  memberId?: string;
-  memberFreePass?: boolean;
+  member_id?: string;
+  member_free_pass?: boolean;
 }
 
 // export interface IProfile extends IUser {}

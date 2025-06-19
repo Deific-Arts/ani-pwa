@@ -37,8 +37,8 @@ export class AniSearch extends LitElement {
   }
 
   render() {
-    const hasFreePass = this.userState.profile?.memberFreePass;
-    const isMember = !!this.userState.profile?.memberId;
+    const hasFreePass = this.userState.profile?.member_free_pass;
+    const isMember = !!this.userState.profile?.member_id;
 
     if (this.userState.isLoggedIn) {
       if (hasFreePass || isMember) {

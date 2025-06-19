@@ -81,10 +81,10 @@ export default class AniInformation extends LitElement {
               <div class="profile-image">${this.makeProfileImage()}</div>
               <hr />
               <p>
-                <kemet-button variant="text" @click=${() => switchRoute(`/user/${this.userState?.profile?.id}`)}>View Profile</kemet-button>
+                <kemet-button variant="text" link=${`/user/${this.userState?.profile?.id}`}>View Profile</kemet-button>
                 &nbsp;|&nbsp;
                 <kemet-button variant="text" @click=${() => this.logout()}>Log Out</kemet-button>
-                ${!!this.userState.profile.memberId
+                ${!!this.userState.profile.member_id
                   ? html`&nbsp;|&nbsp;<kemet-button variant="text" @click=${() => this.handleManageMembership()}>Manage Membership</kemet-button>`
                   : html`&nbsp;|&nbsp;<kemet-button variant="text" @click=${() => switchRoute('/membership/checkout')}>Become a Member</kemet-button>`
                 }
@@ -93,12 +93,12 @@ export default class AniInformation extends LitElement {
               <div>
                 <p>
                   <kemet-field label="First Name" slug="first-name">
-                    <kemet-input slot="input" name="firstName" rounded filled value=${this.userState?.profile?.firstName}></kemet-input>
+                    <kemet-input slot="input" name="first_name" rounded filled value=${this.userState?.profile?.first_name}></kemet-input>
                   </kemet-field>
                 </p>
                 <p>
                   <kemet-field label="Last Name" slug="last-name">
-                    <kemet-input slot="input" name="lastName" rounded filled value=${this.userState?.profile?.lastName}></kemet-input>
+                    <kemet-input slot="input" name="last_name" rounded filled value=${this.userState?.profile?.last_name}></kemet-input>
                   </kemet-field>
                 </p>
                 <p>
@@ -275,7 +275,7 @@ export default class AniInformation extends LitElement {
     const response = await fetch(`${API_URL}/api/qenna/create-portal-session`, {
       method: "POST",
       body: JSON.stringify({
-        member_id: this.userState.profile.memberId || ''
+        member_id: this.userState.profile.member_id || ''
       })
     });
 

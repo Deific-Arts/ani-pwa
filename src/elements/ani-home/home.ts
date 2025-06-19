@@ -85,7 +85,7 @@ export default class AniHome extends LitElement {
     this.currentTab = event.detail.innerText.toLowerCase();
     const currentFeedElement = this.shadowRoot?.querySelector('ani-feed') as AniFeed;
     currentFeedElement.current = this.currentTab;
-    currentFeedElement.currentPage[this.currentTab] = 1;
+    // currentFeedElement.currentPage[this.currentTab] = 1;
     currentFeedElement.getQuotes();
   }
 }

@@ -129,7 +129,7 @@ export default class AniQuote extends LitElement {
   }
 
   isMember() {
-    if (this.quote.user?.memberFreePass || !!this.quote.user?.memberId) {
+    if (this.quote.user?.member_free_pass || !!this.quote.user?.member_id) {
       return html`&nbsp;<kemet-icon icon="patch-check-fill"></kemet-icon>`;
     }
     return null;

@@ -44,7 +44,8 @@ export default class AniPostComment extends LitElement {
   }
 
   render() {
-    const isMember = this.userState.profile.memberFreePass || !!this.userState.profile.memberId;
+    console.log(this.userState);
+    const isMember = this.userState.profile.member_free_pass || !!this.userState.profile.member_id;
 
     if (isMember) {
       return html`
@@ -81,7 +82,7 @@ export default class AniPostComment extends LitElement {
     const form = this.commentForm;
     const formData = new FormData(form);
     const endpoint = this.commentForm.getAttribute('action');
-    const user = this.userState.user.user;
+    const user = this.userState.profile;
     const commentTextarea = this.commentForm.querySelector('kemet-textarea') as KemetTextarea;
 
     delete user.documentId;
@@ -90,7 +91,6 @@ export default class AniPostComment extends LitElement {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.userState.user.jwt}`
       },
       body: JSON.stringify({
         data: {

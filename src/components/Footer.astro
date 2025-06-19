@@ -1,6 +1,10 @@
 <ani-footer-nav></ani-footer-nav>
 <ani-modal></ani-modal>
 <script>
+  const isDark = matchMedia("(prefers-color-scheme: dark)").matches;
+  isDark && document.documentElement.setAttribute("polarity", "dark");
+</script>
+<script>
   // npm
   import "kemet-ui/dist/components/kemet-icon/kemet-icon";
   import "kemet-ui/dist/components/kemet-button/kemet-button";

@@ -1,4 +1,4 @@
-import { css } from 'lit';
+import { css, unsafeCSS } from 'lit';
 import FilePondStyles from 'filepond/dist/filepond.min.css?raw';
 import FilePondImagePreviewStyles from 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css?raw';
 
@@ -113,6 +113,5 @@ export const libraryStyles = css`
   }
 `;
 
-export const filepondStyles = css`FilePondStyles`;
-export const filepondImagePreviewStyles = css`FilePondImagePreviewStyles`;
-
+export const filepondStyles = css`${unsafeCSS(FilePondStyles)}`;
+export const filepondImagePreviewStyles = css`${unsafeCSS(FilePondImagePreviewStyles)}`;

@@ -35,7 +35,7 @@ export class AniDeleteUser extends LitElement {
   }
 
   async handleRemoveAccount() {
-    if (!!this.userState.profile.memberId) {
+    if (!!this.userState.profile.member_id) {
       const cancelRequest = await fetch(`${API_URL}/api/qenna/cancel-membership`, {
         method: "POST",
         headers: {
@@ -43,7 +43,7 @@ export class AniDeleteUser extends LitElement {
           'Authorization': `Bearer ${this.userState.user.jwt}`
         },
         body: JSON.stringify({
-          member_id: this.userState.profile.memberId || ''
+          member_id: this.userState.profile.member_id || ''
         })
       });
 
