@@ -48,7 +48,7 @@ export default class AniInformation extends LitElement {
   @state()
   showUploadProfileImage: boolean = false;
 
-  @query('form[action*=user]')
+  @query('form')
   userForm!: HTMLFormElement;
 
   @query('input[name=filepond]')
@@ -73,7 +73,7 @@ export default class AniInformation extends LitElement {
   render() {
     return html`
       <kemet-card>
-        <form method="post" action="api/users" @submit=${(event: SubmitEvent) => this.updateProfile(event)}>
+        <form method="post" @submit=${(event: SubmitEvent) => this.updateProfile(event)}>
           <fieldset>
             <legend>Welcome, ${this.userState?.profile?.username}</legend>
             <section class="profile">
@@ -144,7 +144,8 @@ export default class AniInformation extends LitElement {
   }
 
   makeProfileImage() {
-    const profileImage = this.userState.profile?.avatar?.url;
+    const profileImage = this.userState.profile?.avatar;
+    console.log(this.userState.profile);
 
     if (profileImage && !this.showUploadProfileImage) {
       return html`
@@ -168,7 +169,7 @@ export default class AniInformation extends LitElement {
   async updateProfile(event: SubmitEvent) {
     event.preventDefault();
 
-    if (!this.userState.user) {
+    if (!this.userState.profile) {
       return;
     }
 
@@ -180,14 +181,11 @@ export default class AniInformation extends LitElement {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.userState.user.jwt}`
       },
       body: JSON.stringify(Object.fromEntries(formData))
     };
 
-    const endpoint = this.userForm.getAttribute('action');
-
-    const profile = await fetch(`${API_URL}/${endpoint}/${this.userState.profile.id}`, options)
+    const profile = await fetch(`/api/users/details/${this.userState.profile.id}`, options)
       .then((response) => response.json())
       .catch((error) => console.error(error));
 
@@ -210,7 +208,6 @@ export default class AniInformation extends LitElement {
       method: 'POST',
       header: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.userState.user.jwt}`
       },
       body: uploadFormData
     }
@@ -218,22 +215,22 @@ export default class AniInformation extends LitElement {
     let avatar;
 
     if (hasFile) {
-      avatar = await fetch(`${API_URL}/api/upload`, uploadOptions)
+      avatar = await fetch(`/api/uploads/avatars/${this.userState.profile.id}`, uploadOptions)
         .then((response) => response.json())
         .catch((error) => console.error(error));
 
-      const avatarOptions = {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.userState.user.jwt}`
-        },
-        body: JSON.stringify({ avatar })
-      };
+      // const avatarOptions = {
+      //   method: 'PUT',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Authorization': `Bearer ${this.userState.user.jwt}`
+      //   },
+      //   body: JSON.stringify({ avatar })
+      // };
 
-      await fetch(`${API_URL}/${endpoint}/${this.userState.profile.id}`, avatarOptions)
-        .then((response) => response.json())
-        .catch((error) => console.error(error));
+      // await fetch(`${API_URL}/${endpoint}/${this.userState.profile.id}`, avatarOptions)
+      //   .then((response) => response.json())
+      //   .catch((error) => console.error(error));
     }
   }
 

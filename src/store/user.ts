@@ -12,7 +12,7 @@ export interface IUserStore {
   // logout: () => void;
 }
 
-const API_URL = import.meta.env.VITE_API_URL;
+// const API_URL = import.meta.env.VITE_API_URL;
 
 const getProfile = async () => {
   // const user = Cookies.get('ani-user') ? JSON.parse(Cookies.get('ani-user') || '') : undefined;
@@ -42,26 +42,19 @@ const getProfile = async () => {
 
   return;
 }
+const profileResponse = await getProfile();
 
 const isLoggedIn = async () => await fetch('/api/auth/authorized').then(response => response.json());
-
-const profileResponse = await getProfile();
 const isLoggedInResponse = await isLoggedIn();
 
+const getAvatar = async () => await fetch(`/api/users/avatar?filePath=${profileResponse.avatar}`).then(response => response.json());
+const avatarResponse = await getAvatar();
+
+console.log(avatarResponse);
+
 const store = createStore<IUserStore>(set => ({
-  // user: Cookies.get('ani-user') ? JSON.parse(Cookies.get('ani-user') || '') : {},
-  profile: profileResponse,
+  profile: { ...profileResponse, avatar: avatarResponse },
   updateProfile: (profile: IProfile) => set(() => { return { profile } }),
-  // isLoggedIn: !!Cookies.get('ani-user'),
-  // login: (loginData) => set(() => {
-  //   console.log(loginData.user);
-  //   Cookies.set('ani-user', JSON.stringify(loginData.user), { expires: 7 });
-  //   return { isLoggedIn: true, user: loginData };
-  // }),
-  // logout: () => set(() => {
-  //   Cookies.remove('ani-user');
-  //   return { isLoggedIn: false };
-  // }),
   isLoggedIn: isLoggedInResponse
 }));
 

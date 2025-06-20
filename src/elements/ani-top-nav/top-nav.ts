@@ -66,7 +66,7 @@ export default class AniTopNav extends LitElement {
   }
 
   makeProfileImage() {
-    const profileImage = this.userState.profile?.avatar?.url;
+    const profileImage = this.userState.profile?.avatar;
     const isLoginPage = this.appState.currentRoute.includes('login');
 
     if (this.userState.isLoggedIn) {

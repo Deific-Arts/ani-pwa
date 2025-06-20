@@ -5,15 +5,15 @@ import Autolinker from 'autolinker';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import { switchRoute } from '../../shared/utilities';
-import { IBook, IQuote, IProfile } from '../../shared/interfaces';
-import userStore, { IUserStore } from '../../store/user';
+import { type IBook, type IQuote, type IProfile } from '../../shared/interfaces';
+import userStore, { type IUserStore } from '../../store/user';
 import sharedStyles from '../../shared/styles';
 import styles from './styles';
 
 import '../ani-quote/quote';
 import '../ani-comment/comment';
 
-const API_URL = import.meta.env.VITE_API_URL;
+// const API_URL = import.meta.env.VITE_API_URL;
 const APP_URL = window.location.origin;
 
 @customElement('ani-user-view')
@@ -58,11 +58,11 @@ export default class AniUserView extends LitElement {
         html `
           <header>
             <div>
-              ${this.user.avatar.url
-                ? html`<img class="profile" src="${this.user.avatar.url}" alt="${this.user.username}" />`
+              ${this.user.avatar
+                ? html`<img class="profile" src="${this.user.avatar}" alt="${this.user.username}" />`
                 : html`<img class="profile" src="https://placehold.co/80x80?text=${this.user.username}" alt="${this.user?.username}" />`
               }
-              ${this.userState.isLoggedIn && this.user.id !== this.userState.user.user.id ? html`
+              ${this.userState.isLoggedIn && this.user.id !== this.userState.profile?.id ? html`
                 <kemet-button variant="circle" outlined title="Follow ${this.user.username}" @click=${() => this.handleFollow()}>
                   <kemet-icon icon="${this.follow ? 'person-fill-dash' : 'person-fill-add'}" size="24"></kemet-icon>
                 </kemet-button>
@@ -71,9 +71,9 @@ export default class AniUserView extends LitElement {
             <div>
               <h2>${this.user.username}</h2>
               <aside>
-                <span>${this.quotes.length} quotes</span>
-                <span>${this.followers} followers</span>
-                <span>${this.user.following?.length || 0} following</span>
+                <span>${this.user.counts?.quotes} quotes</span>
+                <span>${this.user.counts?.followers} followers</span>
+                <span>${this.user.counts?.following} following</span>
               </aside>
               <div>${this.parseBio(this.user.bio)}</div>
             </div>
@@ -82,8 +82,8 @@ export default class AniUserView extends LitElement {
         `
         : html`
           <header>
-            <p>Sorry, we couldn't find the requested user.</p>
-            <kemet-button variant="rounded" @click=${() => switchRoute('/home')}>Go home</kemet-button>
+            <p>Sorry, that user doesn't exist.</p>
+            <kemet-button variant="rounded" href="/">Go home</kemet-button>
           </header>
         `
       }
@@ -97,8 +97,7 @@ export default class AniUserView extends LitElement {
     const metaPropertyUrl = document.querySelector('meta[property="og:url"]') as HTMLMetaElement;
 
     this.userId = this.userId || path[path.length - 1];
-    const response = await fetch(`${API_URL}/api/users/${this.userId}?populate=*`);
-    this.user = !!this.user ? this.user : await response.json();
+    this.user = await fetch(`/api/users/details/${this.userId}`).then(response => response.json());
     this.hasFetchedUser = true;
 
     document.title = `${this.user.username} | Ani Book Quotes`;
@@ -106,21 +105,20 @@ export default class AniUserView extends LitElement {
     if (metaPropertyTitle) metaPropertyTitle.content = `${this.user.username} | Ani Book Quotes`;
     if (metaPropertyUrl) metaPropertyUrl.content = `${APP_URL}/user/${this.user.id}`;
 
-    this.getQuotes();
-    this.getFollowers();
+    // this.getQuotes();
+    // this.getFollowers();
   }
 
-  async getQuotes() {
-    const response = await fetch(`${API_URL}/api/quotes?filters[user][username][$eq]=${this.user.username}&populate=user.avatar&populate=book`);
-    const { data } = await response.json();
-    this.quotes = data;
-  }
+  // async getQuotes() {
+  //   const response = await fetch(`/api/quotes/${this.user.id}`);
+  //   this.quotes = await response.json();
+  // }
 
-  async getFollowers() {
-    const response = await fetch(`${API_URL}/api/users`);
-    const responseData = await response.json();
-    this.followers = responseData.filter((user: IProfile) => user.following?.includes(this.user.id)).length;
-  }
+  // async getFollowers() {
+  //   const response = await fetch(`${API_URL}/api/users`);
+  //   const responseData = await response.json();
+  //   this.followers = responseData.filter((user: IProfile) => user.following?.includes(this.user.id)).length;
+  // }
 
   makeBooks() {
     if (this.user.books && this.user.books.length > 0) {

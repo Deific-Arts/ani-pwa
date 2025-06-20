@@ -4,8 +4,9 @@ import { supabase } from "../../../shared/database";
 
 export const prerender = false;
 
-export const GET: APIRoute = async ({ request }) => {
+export const GET: APIRoute = async ({ params }) => {
   try {
+    const { user_id } = params;
     const { data: quotes, error } = await supabase
       .from('Quotes')
       .select(`
@@ -19,28 +20,14 @@ export const GET: APIRoute = async ({ request }) => {
         likes,
         requotes,
         book:Books (id, title, identifier),
-        user:Profiles (id, username, email, avatar)
-      `);
+        user:Profiles (id, username, email)
+      `)
+      .eq('user_id', user_id);
 
     if (quotes) {
-      const { data: { publicUrl } } = supabase
-        .storage
-        .from('avatars')
-        .getPublicUrl('');
-
-      const hm = quotes.map((quote) => {
-        console.log(quote.user);
-        return {
-          ...quote,
-          user: {
-            ...quote.user,
-            avatar: `${publicUrl}/${quote.user.avatar}`
-          }
-        }
-      });
 
       return new Response(
-        JSON.stringify(hm),
+        JSON.stringify(quotes),
         { status: 200 }
       );
     }

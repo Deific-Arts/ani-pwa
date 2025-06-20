@@ -72,6 +72,7 @@ export interface IProfile {
   following: number[],
   role?: IRole;
   books?: IBook[];
+  counts?: { quotes: number, followers: number, following: number };
   avatar: IAvatar;
   member_id?: string;
   member_free_pass?: boolean;

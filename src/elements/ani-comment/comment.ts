@@ -1,8 +1,8 @@
 import { LitElement, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { formatDistance } from 'date-fns';
-import { IComment } from '../../shared/interfaces';
-import userStore, { IUserStore } from '../../store/user';
+import { type IComment } from '../../shared/interfaces';
+import userStore, { type IUserStore } from '../../store/user';
 import Autolinker from 'autolinker';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
@@ -48,7 +48,7 @@ export default class AniComment extends LitElement {
 
   displayDate() {
     const now = new Date();
-    const then = new Date(this.comment.createdAt);
+    const then = new Date(this.comment.created_at);
     return formatDistance(now, then);
   }
 

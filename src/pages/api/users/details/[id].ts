@@ -1,0 +1,98 @@
+import type { APIRoute } from "astro";
+import 'dotenv/config'
+import { supabase } from "../../../../shared/database";
+
+export const prerender = false;
+
+export const GET: APIRoute = async ({ params }) => {
+  try {
+    const userId = params.id;
+
+    const { data: profile, error: profileError } = await supabase
+      .from('Profiles')
+      .select('*')
+      .eq('id', userId)
+      .single();
+
+    const { data: books, error: booksError } = await supabase
+      .from('Books')
+      .select('*')
+      .in('id', profile.book_ids);
+
+    const { data: quotes, error: quotesError, count: quotesCount } = await supabase
+      .from('Quotes')
+      .select('*', { count: 'exact'})
+      .eq('user_id', userId);
+
+    const { data: profiles, error: profilesError } = await supabase
+      .from('Profiles')
+      .select('following');
+
+    const followerCount = profiles?.filter((user) => user.following?.includes(userId)).length;
+
+    const { data: { publicUrl } } = supabase
+      .storage
+      .from('avatars')
+      .getPublicUrl(profile.avatar);
+
+    if (profile && books && quotesCount) {
+      const data = {
+        ...profile,
+        books,
+        counts: { quotes: quotesCount, followers: followerCount, following: profile.following?.length || 0 },
+        avatar: publicUrl
+      };
+
+      return new Response(
+        JSON.stringify(data),
+        { status: 200 }
+      );
+    }
+
+    return new Response(
+      JSON.stringify({ success: false, message: "Failed to get profile.", errors: { profileError, booksError, quotesError, profilesError } }),
+      { status: 400 }
+    );
+  } catch (error) {
+    console.log(error);
+    return new Response(
+      JSON.stringify({ success: false, message: "An internal server error occurred." }),
+      { status: 500 })
+  }
+}
+
+export const PUT: APIRoute = async ({ params, request }) => {
+  try {
+    const userId = Number(params.id);
+    const body = await request.json();
+
+    const { error } = await supabase
+      .from('Profiles')
+      .update({
+        first_name: body.first_name,
+        last_name: body.last_name,
+        email: body.email,
+        bio: body.bio,
+        //avatar: params.avatar,
+      })
+      .eq('id', userId)
+
+    if (error) {
+      return new Response(
+        JSON.stringify({ success: false, message: "Failed to update profile.", error }),
+        { status: 400 }
+      );
+    }
+
+    return new Response(
+      JSON.stringify({ success: true, message: "Profile updated successfully." }),
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log(error);
+    return new Response(
+      JSON.stringify({ success: false, message: "An internal server error occurred."}),
+      { status: 500 })
+  }
+}
+

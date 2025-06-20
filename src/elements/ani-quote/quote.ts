@@ -40,18 +40,19 @@ export default class AniQuote extends LitElement {
   }
 
   render() {
+    console.log(this.quote);
     return this.quote && this.quote.user ? html`
       ${this.quote.user.id === this.userState.profile?.id
         ? html`<button aria-label="Delete"><kemet-icon icon="x-lg" size="16" @click=${() => this.deleteQuote()}></kemet-icon></button>`
         : null
       }
       <header>
-        <button aria-label="Avatar" @click=${() => switchRoute(`/user/${this.quote.user.id}`)}>
+        <a aria-label="Avatar" href=${`/user/${this.quote.user.id}`}>
           ${this.quote.user.avatar
-            ? html`<img src="${this.quote.user.avatar.url}" alt="${this.quote.user.username}" />`
+            ? html`<img src="${this.quote.user.avatar}" alt="${this.quote.user.username}" />`
             : html`<img src="https://placehold.co/80x80?text=${this.quote.user.username}" alt="${this.quote?.user?.username}" />`
           }
-        </button>
+        </a>
         <div>
           ${this.isRequote && this.originalQuote
             ? html`<strong>${this.quote.user.username}${this.isMember()}</strong> <span>requoted ${this.originalQuote.user.username} ${this.displayDate()} ago</span>`
