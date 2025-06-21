@@ -68,35 +68,35 @@ export default class aniBook extends LitElement {
     this.addEventListener('click', async () => {
       this.selected = !this.selected;
       this.selected ? this.addBook() : this.removeBook();
-      const options = {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.userState.user.jwt}`
-        }
-      };
-      const userProfile = await fetch(`${API_URL}/api/users/me?populate=books`, options).then((response) => response.json());
-      this.userState.updateProfile(userProfile);
+      // const options = {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Authorization': `Bearer ${this.userState.user.jwt}`
+      //   }
+      // };
+      // const userProfile = await fetch(`${API_URL}/api/users/me?populate=books`, options).then((response) => response.json());
+      // this.userState.updateProfile(userProfile);
     });
   }
 
   async addBook() {
     let book;
-    const getResponse = await fetch(`${API_URL}/api/books?filters[identifier][$eq]=${this.identifier}`).then(response => response.json());
+    const bookResponse = await fetch(`/api/books/${this.identifier}`).then(response => response.json());
 
-    if (getResponse.data.length > 0) {
-      book = getResponse.data[0];
+    if (bookResponse.success) {
+      book = bookResponse.data;
     } else {
       // if there are no books, added a new one
       const createOptions = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.userState.user.jwt}`
         },
-        body: JSON.stringify({ data: { title: this.book.volumeInfo.title, identifier: this.book.id } })
+        body: JSON.stringify({ title: this.book.volumeInfo.title, identifier: this.book.id })
       };
-      const createResponse = await fetch(`${API_URL}/api/books`, createOptions).then(response => response.json())
+      const createResponse = await fetch(`/api/books/create`, createOptions).then(response => response.json());
+      console.log(createResponse);
       book = createResponse.data;
     }
 
@@ -105,20 +105,17 @@ export default class aniBook extends LitElement {
     this.userState.updateProfile({
       ...this.userState.profile,
       books: [...books, book]
-    })
+    });
 
     const updateBooksOptions = {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.userState.user.jwt}`
       },
-      body: JSON.stringify({ books: this.userState.profile.books })
+      body: JSON.stringify({ book_ids: this.userState.profile.books?.map(book => book.id) })
     };
 
-    const endpoint = 'api/users';
-
-    await fetch(`${API_URL}/${endpoint}/${this.userState.user.user.id}`, updateBooksOptions)
+    await fetch(`/api/users/details/${this.userState.profile.id}`, updateBooksOptions)
       .then((response) => response.json())
       .catch((error) => console.error(error));
   }
@@ -135,14 +132,11 @@ export default class aniBook extends LitElement {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.userState.user.jwt}`
       },
-      body: JSON.stringify({ books: this.userState.profile.books })
+      body: JSON.stringify({ book_ids: this.userState.profile.books?.map(book => book.id) })
     };
 
-    const endpoint = 'api/users';
-
-    await fetch(`${API_URL}/${endpoint}/${this.userState.user.user.id}`, updateBooksOptions)
+    await fetch(`/api/users/details/${this.userState.profile.id}`, updateBooksOptions)
       .then((response) => response.json())
       .catch((error) => console.error(error));
   }

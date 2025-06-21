@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import 'dotenv/config'
 import { supabase } from "../../../shared/database";
+import type { IQuote } from "../../../shared/interfaces";
 
 export const prerender = false;
 
@@ -28,8 +29,7 @@ export const GET: APIRoute = async ({ request }) => {
         .from('avatars')
         .getPublicUrl('');
 
-      const hm = quotes.map((quote) => {
-        console.log(quote.user);
+      const response = quotes.map((quote: any) => {
         return {
           ...quote,
           user: {
@@ -40,7 +40,7 @@ export const GET: APIRoute = async ({ request }) => {
       });
 
       return new Response(
-        JSON.stringify(hm),
+        JSON.stringify(response),
         { status: 200 }
       );
     }

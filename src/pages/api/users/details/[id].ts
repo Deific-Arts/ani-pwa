@@ -68,13 +68,7 @@ export const PUT: APIRoute = async ({ params, request }) => {
 
     const { error } = await supabase
       .from('Profiles')
-      .update({
-        first_name: body.first_name,
-        last_name: body.last_name,
-        email: body.email,
-        bio: body.bio,
-        //avatar: params.avatar,
-      })
+      .update(body)
       .eq('id', userId)
 
     if (error) {

@@ -1,11 +1,10 @@
 export interface IQuote {
   id: number;
-  documentId: string;
   quote: string;
   likes: number[];
   created_at: string;
-  updatedAt: string;
-  publishedAt: string;
+  updated_at: string;
+  published_at: string;
   requote: string | null;
   requotes: number[];
   page: string;
@@ -14,13 +13,12 @@ export interface IQuote {
   comments?: IComment[];
   user: IProfile;
   book: IBook;
-  // author: any;
 }
 
 export interface IComment {
   id: number;
   quoteId: number;
-  documentId: string;
+  // documentId: string;
   comment: string;
   created_at: string;
   updated_at: string;
@@ -73,7 +71,7 @@ export interface IProfile {
   role?: IRole;
   books?: IBook[];
   counts?: { quotes: number, followers: number, following: number };
-  avatar: IAvatar;
+  avatar: string;
   member_id?: string;
   member_free_pass?: boolean;
 }
