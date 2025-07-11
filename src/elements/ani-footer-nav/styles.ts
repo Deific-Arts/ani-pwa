@@ -7,6 +7,11 @@ export default css`
     background: var(--app-background-color);
   }
 
+  a {
+    color: var(--app-color-text);
+    text-decoration: none;
+  }
+
   nav {
     display: flex;
     gap: var(--kemet-spacer-md);

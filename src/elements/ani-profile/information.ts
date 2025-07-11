@@ -236,35 +236,35 @@ export default class AniInformation extends LitElement {
 
   async deleteProfileImage(event: SubmitEvent) {
     event.preventDefault();
+    console.log(this.userState.profile);
     this.showUploadProfileImage = true;
-    this.userState.profile.avatar.url = '';
+    // this.userState.profile.avatar.url = '';
 
-    const options = {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.userState.user.jwt}`
-      },
-      body: JSON.stringify({
-        avatar: null,
-      })
-    }
+    // const options = {
+    //   method: 'PUT',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'Authorization': `Bearer ${this.userState.user.jwt}`
+    //   },
+    //   body: JSON.stringify({
+    //     avatar: null,
+    //   })
+    // }
 
-    await fetch(`${API_URL}/api/users/${this.userState.profile.id}`, options);
+    // await fetch(`${API_URL}/api/users/${this.userState.profile.id}`, options);
 
     const deleteOptions = {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.userState.user.jwt}`
-      },
+      }
     }
 
-    await fetch(`${API_URL}/api/upload/files/${this.userState.profile.avatar.id}`, deleteOptions);
+    await fetch(`/api/uploads/avatars/${this.userState.profile.id}`, deleteOptions);
   }
 
-  logout() {
-    this.userState.logout();
+  async logout() {
+    await fetch(`/api/auth/logout`);
     window.location.href = "/";
   }
 

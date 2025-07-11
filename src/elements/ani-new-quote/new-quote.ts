@@ -12,8 +12,6 @@ import sharedStyles from '../../shared/styles';
 import KemetTextarea from 'kemet-ui/dist/components/kemet-textarea/kemet-textarea';
 import KemetInput from 'kemet-ui/dist/components/kemet-input/kemet-input';
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 @customElement('ani-new-quote')
 export default class AniNewQuote extends LitElement {
   static styles = [styles, sharedStyles];
@@ -102,29 +100,26 @@ export default class AniNewQuote extends LitElement {
 
     userData.book = this.userBook ? this.userBook.shadowRoot!.querySelector('select')?.value as string : '';
 
-    const { data } = await fetch(`${API_URL}/api/books?filters[identifier][$eq]=${userData.book}`).then(response => response.json());
-    const book = data[0];
     const user = this.userState.profile;
 
     const payload = {
       quote: userData.quote,
       requote: '',
       requotes: [],
-      user: user.id,
-      book: book?.id,
+      user_id: user.id,
+      book_id: userData.book,
       page: userData.page,
       note: userData.note,
       private: false,
       likes: []
     }
 
-    const newQuoteResponse = await fetch(`${API_URL}/api/quotes?populate=user.avatar&populate=book`, {
+    const newQuoteResponse = await fetch(`/api/quotes/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.userState.user.jwt}`
       },
-      body: JSON.stringify({ data: payload })
+      body: JSON.stringify(payload)
     }).then((response) => response.json());
 
     const { error, data: newData } = newQuoteResponse;
@@ -149,7 +144,7 @@ export default class AniNewQuote extends LitElement {
 
   makeBookOptions() {
     const books = this.userState.profile.books as IBook[];
-    return books.map((book: IBook) => html`<kemet-option label="${book.title}" value="${book.identifier}"></kemet-option>`)
+    return books.map((book: IBook) => html`<kemet-option label="${book.title}" value="${book.id}"></kemet-option>`)
   }
 
   handleCancel() {

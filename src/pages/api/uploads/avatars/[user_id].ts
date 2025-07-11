@@ -56,3 +56,42 @@ export const POST: APIRoute = async ({ params, request }) => {
       { status: 500 })
   }
 }
+
+export const DELETE: APIRoute = async ({ params , request }) => {
+  try {
+    const url = new URL(request.url);
+    const origin = url.origin;
+    const me = await fetch(`${origin}/api/users/me`).then(response => response.json());
+
+    console.log(me.avatar);
+
+    const { error: storageError } = await supabase
+      .storage
+      .from('avatars')
+      .remove([me.avatar]);
+
+    const { error: profileError } = await supabase
+      .from('Profiles')
+      .update({
+        avatar: null
+      })
+      .eq('id', params.user_id);
+
+    if (storageError || profileError) {
+      return new Response(
+        JSON.stringify({ success: false, message: "Failed to delete avatar.", error: { storageError, profileError } }),
+        { status: 400 }
+      );
+    }
+
+    return new Response(
+      JSON.stringify({ success: true, message: "Avatar deleted successfully." }),
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log(error);
+    return new Response(
+      JSON.stringify({ success: false, message: "An internal server error occurred." }),
+      { status: 500 })
+  }
+}

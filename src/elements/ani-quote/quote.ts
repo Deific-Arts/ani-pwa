@@ -40,7 +40,6 @@ export default class AniQuote extends LitElement {
   }
 
   render() {
-    console.log(this.quote);
     return this.quote && this.quote.user ? html`
       ${this.quote.user.id === this.userState.profile?.id
         ? html`<button aria-label="Delete"><kemet-icon icon="x-lg" size="16" @click=${() => this.deleteQuote()}></kemet-icon></button>`
@@ -98,10 +97,10 @@ export default class AniQuote extends LitElement {
 
   makeLink() {
     if (!this.isSingle) {
-      const documentId = this.isRequote && this.originalQuote ? this.originalQuote.documentId : this.quote.documentId;
+      const id = this.isRequote && this.originalQuote ? this.originalQuote.id : this.quote.id
       return html`
         <div>
-          <a href="/quote/${documentId}"><kemet-icon icon="link" size="24"></kemet-icon></a>
+          <a href="/quote/${id}"><kemet-icon icon="link" size="24"></kemet-icon></a>
         </div>
       `
     }
@@ -109,7 +108,7 @@ export default class AniQuote extends LitElement {
   }
 
   deleteQuote() {
-    fetch(`${API_URL}/api/quotes/${this.quote.documentId}`, {
+    fetch(`/api/quotes/${this.quote.id}`, {
       method: 'DELETE',
       // headers: {
       //   Authorization: `Bearer ${this.userState.user.jwt}`

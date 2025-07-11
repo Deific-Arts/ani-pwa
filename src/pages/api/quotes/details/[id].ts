@@ -1,13 +1,13 @@
 import type { APIRoute } from "astro";
 import 'dotenv/config'
-import { supabase } from "../../../shared/database";
+import { supabase } from "../../../../shared/database";
 
 export const prerender = false;
 
 export const GET: APIRoute = async ({ params }) => {
   try {
-    const { user_id } = params;
-    const { data: quotes, error } = await supabase
+    const { id } = params;
+    const { data: quote, error } = await supabase
       .from('Quotes')
       .select(`
         id,
@@ -20,14 +20,27 @@ export const GET: APIRoute = async ({ params }) => {
         likes,
         requotes,
         book:Books (id, title, identifier),
-        user:Profiles (id, username, email)
+        user:Profiles (id, username, email, avatar)
       `)
-      .eq('user_id', user_id);
+      .eq('id', id)
+      .single();
 
-    if (quotes) {
+    if (quote) {
+      const { data: { publicUrl } } = supabase
+        .storage
+        .from('avatars')
+        .getPublicUrl('');
+
+      const response = {
+        ...quote,
+        user: {
+          ...quote.user,
+          avatar: `${publicUrl}/${quote.user.avatar}`
+        }
+      };
 
       return new Response(
-        JSON.stringify(quotes),
+        JSON.stringify(response),
         { status: 200 }
       );
     }

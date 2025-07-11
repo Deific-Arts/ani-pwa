@@ -15,12 +15,6 @@ export interface IUserStore {
 // const API_URL = import.meta.env.VITE_API_URL;
 
 const getProfile = async () => {
-  // const user = Cookies.get('ani-user') ? JSON.parse(Cookies.get('ani-user') || '') : undefined;
-
-  // if (!user) {
-  //   return;
-  // }
-
   const options = {
     method: 'GET',
     headers: {
@@ -47,7 +41,7 @@ const profileResponse = await getProfile();
 const isLoggedIn = async () => await fetch('/api/auth/authorized').then(response => response.json());
 const isLoggedInResponse = await isLoggedIn();
 
-const getAvatar = async () => await fetch(`/api/users/avatar?filePath=${profileResponse.avatar}`).then(response => response.json());
+const getAvatar = async () => await fetch(`/api/users/avatar?filePath=${profileResponse.avatar ? profileResponse.avatar : ''}`).then(response => response.json());
 const avatarResponse = await getAvatar();
 
 console.log(avatarResponse);

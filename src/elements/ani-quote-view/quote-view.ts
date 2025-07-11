@@ -1,7 +1,7 @@
 import { LitElement, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { IComment, IQuote } from '../../shared/interfaces';
-import quoteStore, { IQuoteStore } from '../../store/quote';
+import type { IComment, IQuote } from '../../shared/interfaces';
+import quoteStore, { type IQuoteStore } from '../../store/quote';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
 
@@ -17,7 +17,7 @@ export default class AniQuoteView extends LitElement {
   static styles = [styles, sharedStyles];
 
   @property()
-  documentId: string = '';
+  id: string = '';
 
   @state()
   quote!: IQuote;
@@ -44,6 +44,7 @@ export default class AniQuoteView extends LitElement {
   }
 
   render() {
+    console.log(this.quote);
     return html`
       <hr />
       ${this.quote && this.hasFetchedQuote ?
@@ -65,16 +66,15 @@ export default class AniQuoteView extends LitElement {
     const metaPropertyTitle = document.querySelector('meta[property="og:title"]') as HTMLMetaElement;
     const metaPropertyUrl = document.querySelector('meta[property="og:url"]') as HTMLMetaElement;
 
-    this.documentId = !!this.documentId ? this.documentId : path[path.length - 1];
-    const response = await fetch(`${API_URL}/api/quotes/${this.documentId}?populate=user.avatar&populate=book`);
-    const { data } = await response.json();
+    this.id = !!this.id ? this.id : path[path.length - 1];
+    const response = await fetch(`/api/quotes/details/${this.id}`);
     this.hasFetchedQuote = true;
-    this.quote = data;
+    this.quote = await response.json();
 
     document.title = `A quote by ${this.quote.user.username} | Ani Book Quotes`;
     if (metaDescription) metaDescription.content = `"${this.quote.quote}" - ${this.quote.book.title}`;
     if (metaPropertyTitle) metaPropertyTitle.content = `A quote by ${this.quote.user.username} | Ani Book Quotes`;
-    if (metaPropertyUrl) metaPropertyUrl.content = `${APP_URL}/quote/${this.quote.documentId}`;
+    if (metaPropertyUrl) metaPropertyUrl.content = `/quote/${this.quote.id}`;
 
     // we need quote data before we get comments
     this.getComments();

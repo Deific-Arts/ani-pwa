@@ -13,9 +13,9 @@ export const signInModalTemplate = html`
     <p>Want to join in on the fun? Login now!</p>
     <kemet-button
       variant="rounded"
+      link="/login"
       @click=${() => {
         modalsStore.setState({ signInOpened: false });
-        switchRoute('/login');
       }}>
       Login
     </kemet-button>
