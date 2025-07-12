@@ -63,6 +63,10 @@ export const informationStyles = css`
     flex-direction: column;
     width: 100%;
   }
+
+  .actions {
+     text-align: center;
+  }
 `;
 
 export const libraryStyles = css`

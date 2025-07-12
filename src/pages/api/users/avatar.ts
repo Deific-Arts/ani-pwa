@@ -23,7 +23,7 @@ export const GET: APIRoute = ({ request }) => {
 
     return new Response(
       JSON.stringify(null),
-      { status: 400 }
+      { status: 201 }
   );
   } catch (error) {
     console.log(error);

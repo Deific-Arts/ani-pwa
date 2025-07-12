@@ -96,7 +96,6 @@ export default class aniBook extends LitElement {
         body: JSON.stringify({ title: this.book.volumeInfo.title, identifier: this.book.id })
       };
       const createResponse = await fetch(`/api/books/create`, createOptions).then(response => response.json());
-      console.log(createResponse);
       book = createResponse.data;
     }
 

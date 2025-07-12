@@ -44,7 +44,6 @@ export default class AniQuoteView extends LitElement {
   }
 
   render() {
-    console.log(this.quote);
     return html`
       <hr />
       ${this.quote && this.hasFetchedQuote ?

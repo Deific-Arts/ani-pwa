@@ -59,6 +59,7 @@ export default class AniInformation extends LitElement {
 
   constructor() {
     super();
+
     alertStore.subscribe((state) => {
       this.alertState = state;
     });
@@ -71,9 +72,10 @@ export default class AniInformation extends LitElement {
   }
 
   render() {
+    console.log(this.userState);
     return html`
       <kemet-card>
-        <form method="post" @submit=${(event: SubmitEvent) => this.updateProfile(event)}>
+        <form @submit=${(event: SubmitEvent) => this.updateProfile(event)}>
           <fieldset>
             <legend>Welcome, ${this.userState?.profile?.username}</legend>
             <section class="profile">
@@ -83,7 +85,7 @@ export default class AniInformation extends LitElement {
               <p>
                 <kemet-button variant="text" link=${`/user/${this.userState?.profile?.id}`}>View Profile</kemet-button>
                 &nbsp;|&nbsp;
-                <kemet-button variant="text" @click=${() => this.logout()}>Log Out</kemet-button>
+                <kemet-button variant="text" @click=${() => this.userState.logout()}>Log Out</kemet-button>
                 ${!!this.userState.profile.member_id
                   ? html`&nbsp;|&nbsp;<kemet-button variant="text" @click=${() => this.handleManageMembership()}>Manage Membership</kemet-button>`
                   : html`&nbsp;|&nbsp;<kemet-button variant="text" @click=${() => switchRoute('/membership/checkout')}>Become a Member</kemet-button>`
@@ -114,19 +116,20 @@ export default class AniInformation extends LitElement {
                 </p>
               </div>
             </section>
-            <br /><hr /><br />
+          </fieldset>
+          <br />
+          <div class="actions">
             <kemet-button variant="rounded">
               Update Profile <kemet-icon slot="right" icon="chevron-right"></kemet-icon>
             </kemet-button>
-            <br ><br /><hr />
-            <p>
-              <kemet-button variant="text" @click=${() => this.modalsState.setDeleteUserOpened(true)}>
-                Remove Account
-              </kemet-button>
-            </p>
-          </fieldset>
+            &nbsp;&nbsp;&nbsp;&nbsp;|
+            <kemet-button variant="text" @click=${() => this.modalsState.setDeleteUserOpened(true)}>
+              Remove Account
+            </kemet-button>
+          </div>
         </form>
       </kemet-card>
+      <br />
     `;
   }
 
@@ -145,7 +148,6 @@ export default class AniInformation extends LitElement {
 
   makeProfileImage() {
     const profileImage = this.userState.profile?.avatar;
-    console.log(this.userState.profile);
 
     if (profileImage && !this.showUploadProfileImage) {
       return html`
@@ -218,40 +220,12 @@ export default class AniInformation extends LitElement {
       avatar = await fetch(`/api/uploads/avatars/${this.userState.profile.id}`, uploadOptions)
         .then((response) => response.json())
         .catch((error) => console.error(error));
-
-      // const avatarOptions = {
-      //   method: 'PUT',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': `Bearer ${this.userState.user.jwt}`
-      //   },
-      //   body: JSON.stringify({ avatar })
-      // };
-
-      // await fetch(`${API_URL}/${endpoint}/${this.userState.profile.id}`, avatarOptions)
-      //   .then((response) => response.json())
-      //   .catch((error) => console.error(error));
     }
   }
 
   async deleteProfileImage(event: SubmitEvent) {
     event.preventDefault();
-    console.log(this.userState.profile);
     this.showUploadProfileImage = true;
-    // this.userState.profile.avatar.url = '';
-
-    // const options = {
-    //   method: 'PUT',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': `Bearer ${this.userState.user.jwt}`
-    //   },
-    //   body: JSON.stringify({
-    //     avatar: null,
-    //   })
-    // }
-
-    // await fetch(`${API_URL}/api/users/${this.userState.profile.id}`, options);
 
     const deleteOptions = {
       method: 'DELETE',
@@ -261,11 +235,6 @@ export default class AniInformation extends LitElement {
     }
 
     await fetch(`/api/uploads/avatars/${this.userState.profile.id}`, deleteOptions);
-  }
-
-  async logout() {
-    await fetch(`/api/auth/logout`);
-    window.location.href = "/";
   }
 
   async handleManageMembership() {

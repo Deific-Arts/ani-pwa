@@ -47,11 +47,21 @@ export interface IGoogleBook {
 }
 
 export interface IUser {
+  app_metadata: any;
+  aud: string;
+  confirmation_sent_at: string;
+  confirmed_at: string;
+  created_at: string;
   email: string;
-  email_verified: boolean;
-  phone_verified: boolean;
-  sub: string;
-  username: string;
+  email_confirmed_at: string;
+  id: string;
+  identities: any;
+  is_anonymous: boolean;
+  last_sign_in_at: string;
+  phone: string;
+  role: string;
+  updated_at: string;
+  user_metadata: any;
 }
 
 export interface IProfile {
@@ -111,10 +121,10 @@ export interface IAvatar {
   published_at: string;
 }
 
-export interface IUserCookie {
-  user: IUser;
-  profile: IProfile;
-}
+// export interface IUserCookie {
+//   user: IUser;
+//   profile: IProfile;
+// }
 
 export interface IPagination {
   page: number;

@@ -1,6 +1,5 @@
 import { html } from "lit";
 import { svgLogo } from "../../shared/svgs";
-import { switchRoute } from "../../shared/utilities";
 import modalsStore from "../../store/modals";
 
 import '../ani-post-comment/post-comment';

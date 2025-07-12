@@ -23,17 +23,12 @@ export default class aniChangePassword extends LitElement {
   render() {
     return html`
       <kemet-card>
-        <form method="post" action="api/auth/change-password" @submit=${(event: SubmitEvent) => this.changePassword(event)}>
+        <form @submit=${(event: SubmitEvent) => this.changePassword(event)}>
           <fieldset>
             <legend>Change Password</legend>
             <p>
-              <kemet-field label="Current Password">
-                <kemet-input required rounded slot="input" type="password" name="currentPassword" validate-on-blur></kemet-input>
-              </kemet-field>
-            </p>
-            <p>
-              <kemet-field slug="new_password" label="New Password">
-                <kemet-input slot="input" rounded type="password" name="password" required validate-on-blur></kemet-input>
+              <kemet-field label="New Password">
+                <kemet-input slot="input" rounded type="password" name="newPassword" required validate-on-blur></kemet-input>
                 <kemet-password slot="component" message="The following rules are optional but recommended while creating a password:"></kemet-password>
               </kemet-field>
             </p>
@@ -73,12 +68,11 @@ export default class aniChangePassword extends LitElement {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.userState.user.jwt}`
       },
       body: JSON.stringify(Object.fromEntries(formData))
     }
 
-    await fetch(`${API_URL}/api/auth/change-password`, options)
+    await fetch(`/api/auth/change-password`, options)
       .then((response) => response.json())
       .then((responseData) => {
         this.alertState.setOpened(true);

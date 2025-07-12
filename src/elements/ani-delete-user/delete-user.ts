@@ -26,48 +26,49 @@ export class AniDeleteUser extends LitElement {
       <section>
         <h2>Are you sure you want to delete your account?</h2>
         <div>
-          <kemet-button variant="rounded" @click=${() => this.handleRemoveAccount()}>Yes, Delete my account</kemet-button>
+          <kemet-button variant="rounded" @click=${() => this.handleRemoveAccount()}>Yes, delete my account</kemet-button>
           &nbsp;&nbsp;
-          <kemet-button variant="rounded" @click=${() => this.modalsStore.setDeleteUserOpened(false)}>Cancel, get me out of here</kemet-button>
+          <kemet-button variant="rounded" @click=${() => this.modalsStore.setDeleteUserOpened(false)}>No, keep my account</kemet-button>
         </div>
       </section>
     `;
   }
 
   async handleRemoveAccount() {
-    if (!!this.userState.profile.member_id) {
-      const cancelRequest = await fetch(`${API_URL}/api/qenna/cancel-membership`, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.userState.user.jwt}`
-        },
-        body: JSON.stringify({
-          member_id: this.userState.profile.member_id || ''
-        })
-      });
+    // if (!!this.userState.profile.member_id) {
+    //   const cancelRequest = await fetch(`${API_URL}/api/qenna/cancel-membership`, {
+    //     method: "POST",
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Authorization': `Bearer ${this.userState.user.jwt}`
+    //     },
+    //     body: JSON.stringify({
+    //       member_id: this.userState.profile.member_id || ''
+    //     })
+    //   });
 
-      const cancelResponse = await cancelRequest.json();
+    //   const cancelResponse = await cancelRequest.json();
 
-      if (cancelResponse.error) {
-        this.alertState.setStatus('error');
-        this.alertState.setMessage(cancelResponse.message);
-        this.alertState.setOpened(true);
-        this.alertState.setIcon('exclamation-circle');
-      } else {
-        this.deleteAccount();
-      }
-    } else {
-      this.deleteAccount()
-    }
+    //   if (cancelResponse.error) {
+    //     this.alertState.setStatus('error');
+    //     this.alertState.setMessage(cancelResponse.message);
+    //     this.alertState.setOpened(true);
+    //     this.alertState.setIcon('exclamation-circle');
+    //   } else {
+    //     this.deleteAccount();
+    //   }
+    // } else {
+    //   this.deleteAccount()
+    // }
+    this.deleteAccount();
   }
 
   async deleteAccount() {
-    const deleteRequest = await fetch(`${API_URL}/api/ani/destroyme`, {
+    const deleteRequest = await fetch(`/api/users/me`, {
       method: "DELETE",
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.userState.user.jwt}`
+        // 'Authorization': `Bearer ${this.userState.profile.session?.access_token}`
       },
     });
 

@@ -1,18 +1,13 @@
 import { createStore } from 'zustand/vanilla';
-import Cookies from 'js-cookie';
 import appStore from '../store/app';
-import { type IProfile, type IUserCookie } from '../shared/interfaces';
+import { type IProfile } from '../shared/interfaces';
 
 export interface IUserStore {
-  // user: IUserCookie;
   profile: IProfile;
   updateProfile: (profile: IProfile) => void;
   isLoggedIn: boolean;
-  // login: (loginData: IUserCookie) => void;
-  // logout: () => void;
+  logout: () => void;
 }
-
-// const API_URL = import.meta.env.VITE_API_URL;
 
 const getProfile = async () => {
   const options = {
@@ -44,12 +39,14 @@ const isLoggedInResponse = await isLoggedIn();
 const getAvatar = async () => await fetch(`/api/users/avatar?filePath=${profileResponse.avatar ? profileResponse.avatar : ''}`).then(response => response.json());
 const avatarResponse = await getAvatar();
 
-console.log(avatarResponse);
-
 const store = createStore<IUserStore>(set => ({
   profile: { ...profileResponse, avatar: avatarResponse },
   updateProfile: (profile: IProfile) => set(() => { return { profile } }),
-  isLoggedIn: isLoggedInResponse
+  isLoggedIn: isLoggedInResponse,
+  logout: async () => {
+    await fetch(`/api/auth/logout`);
+    window.location.href = "/";
+  }
 }));
 
 export default store;

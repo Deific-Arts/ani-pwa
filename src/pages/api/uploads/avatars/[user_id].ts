@@ -63,8 +63,6 @@ export const DELETE: APIRoute = async ({ params , request }) => {
     const origin = url.origin;
     const me = await fetch(`${origin}/api/users/me`).then(response => response.json());
 
-    console.log(me.avatar);
-
     const { error: storageError } = await supabase
       .storage
       .from('avatars')
