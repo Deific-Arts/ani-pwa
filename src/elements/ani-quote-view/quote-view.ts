@@ -66,7 +66,7 @@ export default class AniQuoteView extends LitElement {
     const metaPropertyUrl = document.querySelector('meta[property="og:url"]') as HTMLMetaElement;
 
     this.id = !!this.id ? this.id : path[path.length - 1];
-    const response = await fetch(`/api/quotes/details/${this.id}`);
+    const response = await fetch(`/api/quotes/${this.id}`);
     this.hasFetchedQuote = true;
     this.quote = await response.json();
 

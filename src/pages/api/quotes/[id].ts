@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import 'dotenv/config'
-import { supabase } from "../../../../shared/database";
+import { supabase } from "../../../shared/database";
 
 export const prerender = false;
 

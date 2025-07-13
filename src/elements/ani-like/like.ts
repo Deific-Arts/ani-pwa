@@ -6,9 +6,6 @@ import { type IQuote } from '../../shared/interfaces';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
 
-
-const API_URL = import.meta.env.VITE_API_URL;
-
 @customElement('ani-like')
 export default class AniLike extends LitElement {
   static styles = [styles, sharedStyles];
@@ -47,31 +44,15 @@ export default class AniLike extends LitElement {
   async handleLike() {
     if (this.userState.isLoggedIn) {
       this.likes = this.liked ? this.likes - 1 : this.likes + 1;
+      this.liked = !this.liked;
 
-      const latestQuoteRequest = await fetch(`${API_URL}/api/quotes/${this.quote.documentId}`);
-      const latestQuoteResponse = await latestQuoteRequest.json();
-      const likes = latestQuoteResponse.data.likes || [];
-
-      const addLike = {
-        likes: [...likes, this.userState.profile.id]
-      };
-
-      const removeLike = {
-        likes: [...likes.filter((like: number) => like !== this.userState.profile.id)]
-      }
-
-      const likeRequestBody = this.liked ? removeLike : addLike;
-
-      await fetch(`${API_URL}/api/quotes/${this.quote.documentId}`, {
+      await fetch(`/api/like/${this.quote.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ data: likeRequestBody })
+        body: JSON.stringify({ liked: this.liked, likedBy: this.userState.profile.id })
       });
-
-      // swap the likes AFTER above logic is complete
-      this.liked = !this.liked;
     } else {
       this.modalsState.setSignInOpened(true);
     }
