@@ -4,7 +4,6 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import Autolinker from 'autolinker';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
-import { switchRoute } from '../../shared/utilities';
 import { type IBook, type IQuote, type IProfile } from '../../shared/interfaces';
 import userStore, { type IUserStore } from '../../store/user';
 import sharedStyles from '../../shared/styles';
@@ -104,21 +103,7 @@ export default class AniUserView extends LitElement {
     if (metaDescription) metaDescription.content = this.user.bio || `User profile for ${this.user.username}`;
     if (metaPropertyTitle) metaPropertyTitle.content = `${this.user.username} | Ani Book Quotes`;
     if (metaPropertyUrl) metaPropertyUrl.content = `${APP_URL}/user/${this.user.id}`;
-
-    // this.getQuotes();
-    // this.getFollowers();
   }
-
-  // async getQuotes() {
-  //   const response = await fetch(`/api/quotes/${this.user.id}`);
-  //   this.quotes = await response.json();
-  // }
-
-  // async getFollowers() {
-  //   const response = await fetch(`${API_URL}/api/users`);
-  //   const responseData = await response.json();
-  //   this.followers = responseData.filter((user: IProfile) => user.following?.includes(this.user.id)).length;
-  // }
 
   makeBooks() {
     if (this.user.books && this.user.books.length > 0) {
@@ -130,7 +115,6 @@ export default class AniUserView extends LitElement {
         </ul>
       `;
     }
-
     return null;
   }
 
@@ -142,30 +126,15 @@ export default class AniUserView extends LitElement {
 
   async handleFollow() {
     this.followers = this.follow ? this.followers - 1 : this.followers + 1;
+    this.follow = !this.follow;
 
-    const latestUserRequest = await fetch(`${API_URL}/api/users/${this.userState.user.user.id}`);
-    const latestUserResponse = await latestUserRequest.json();
-    const following = latestUserResponse.following || [];
-
-    const addFollow = {
-      following: [...following, this.user.id]
-    };
-
-    const removeFollow = {
-      following: [...following.filter((userId: number) => userId !== this.user.id)]
-    }
-
-    const followRequestBody = this.follow ? removeFollow : addFollow;
-
-    await fetch(`${API_URL}/api/users/${this.userState.user.user.id}`, {
+    await fetch(`/api/follow/${this.userState.profile.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(followRequestBody)
+      body: JSON.stringify({ follow: this.follow, follower: this.user.id })
     });
-
-    this.follow = !this.follow;
   }
 }
 

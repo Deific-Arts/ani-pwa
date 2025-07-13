@@ -24,22 +24,22 @@ export const GET: APIRoute = async ({ params }) => {
       .select('*', { count: 'exact'})
       .eq('user_id', userId);
 
-    const { data: profiles, error: profilesError } = await supabase
+    const { data: followers, error: followersError } = await supabase
       .from('Profiles')
-      .select('following');
+      .select('*')
+      .filter('following', 'cs', parseInt(userId as string));
 
-    const followerCount = profiles?.filter((user) => user.following?.includes(userId)).length;
+    const followerCount = followers?.length ?? 0;
 
     const { data: { publicUrl } } = supabase
       .storage
       .from('avatars')
       .getPublicUrl(profile.avatar);
 
-    if (profileError || booksError || quotesError || profilesError) {
-      console.log({ errors: { profileError, booksError, quotesError, profilesError } });
-
+    if (profileError || booksError || quotesError || followersError) {
+      console.log({ errors: { profileError, booksError, quotesError, followersError } });
       return new Response(
-        JSON.stringify({ success: false, message: "Failed to get profile.", errors: { profileError, booksError, quotesError, profilesError } }),
+        JSON.stringify({ success: false, message: "Failed to get profile.", errors: { profileError, booksError, quotesError, followersError } }),
       { status: 500 }
       );
     }

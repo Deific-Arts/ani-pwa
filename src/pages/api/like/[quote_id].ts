@@ -22,8 +22,6 @@ export const PUT: APIRoute = async ({ params, request }) => {
       );
     }
 
-    console.log(body);
-
     const { error } = await supabase
       .from('Quotes')
       .update({
