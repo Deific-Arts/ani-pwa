@@ -35,23 +35,25 @@ export const GET: APIRoute = async ({ params }) => {
       .from('avatars')
       .getPublicUrl(profile.avatar);
 
-    if (profile && books && quotesCount) {
-      const data = {
-        ...profile,
-        books,
-        counts: { quotes: quotesCount, followers: followerCount, following: profile.following?.length || 0 },
-        avatar: publicUrl
-      };
+    if (profileError || booksError || quotesError || profilesError) {
+      console.log({ errors: { profileError, booksError, quotesError, profilesError } });
 
       return new Response(
-        JSON.stringify(data),
-        { status: 200 }
+        JSON.stringify({ success: false, message: "Failed to get profile.", errors: { profileError, booksError, quotesError, profilesError } }),
+      { status: 500 }
       );
     }
 
+    const data = {
+      ...profile,
+      books,
+      counts: { quotes: quotesCount, followers: followerCount, following: profile.following?.length || 0 },
+      avatar: publicUrl
+    };
+
     return new Response(
-      JSON.stringify({ success: false, message: "Failed to get profile.", errors: { profileError, booksError, quotesError, profilesError } }),
-      { status: 400 }
+      JSON.stringify(data),
+      { status: 200 }
     );
   } catch (error) {
     console.log(error);
@@ -66,12 +68,15 @@ export const PUT: APIRoute = async ({ params, request }) => {
     const userId = Number(params.id);
     const body = await request.json();
 
+    delete body.filepond;
+
     const { error } = await supabase
       .from('Profiles')
       .update(body)
       .eq('id', userId)
 
     if (error) {
+      console.log(error);
       return new Response(
         JSON.stringify({ success: false, message: "Failed to update profile.", error }),
         { status: 400 }

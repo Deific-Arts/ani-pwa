@@ -8,14 +8,15 @@ export const POST: APIRoute = async ({ params, request }) => {
   try {
     const body = await request.formData();
     const userId = params.user_id;
+    const uuid = body.get('uuid') as string;
     const file = body.get('files') as File;
 
     if (file) {
-      const filePath = `${Date.now()}_${file.name}`;
+      const filePath = `${uuid}/${Date.now()}_${file.name}`;
 
       const { data: storageData, error: storageError } = await supabase
         .storage
-        .from('avatars') // 👈 your bucket name
+        .from('avatars')
         .upload(filePath, file);
 
       if (storageData) {
@@ -63,16 +64,33 @@ export const DELETE: APIRoute = async ({ params , request }) => {
     const origin = url.origin;
     const me = await fetch(`${origin}/api/users/me`).then(response => response.json());
 
+    // Step 1: List all files in the user's folder
+    const { data: files, error: listError } = await supabase
+      .storage
+      .from('avatars')
+      .list(`${me.uuid}`, { limit: 100 });
+
+    if (listError) {
+      return new Response(JSON.stringify({ success: false, message: "Failed to list files.", error: listError }), {
+        status: 500,
+      });
+    }
+
+    // Step 2: Construct file paths for deletion
+    const filePaths = files.map(file => `${me.uuid.toString()}/${file.name}`);
+
+    console.log('delete profile image', filePaths);
+
+    // Step 3: Delete files
     const { error: storageError } = await supabase
       .storage
       .from('avatars')
-      .remove([me.avatar]);
+      .remove(filePaths);
 
+    // Step 4: Update profile
     const { error: profileError } = await supabase
       .from('Profiles')
-      .update({
-        avatar: null
-      })
+      .update({ avatar: null })
       .eq('id', params.user_id);
 
     if (storageError || profileError) {
@@ -86,10 +104,12 @@ export const DELETE: APIRoute = async ({ params , request }) => {
       JSON.stringify({ success: true, message: "Avatar deleted successfully." }),
       { status: 200 }
     );
+
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return new Response(
       JSON.stringify({ success: false, message: "An internal server error occurred." }),
-      { status: 500 })
+      { status: 500 }
+    );
   }
-}
+};

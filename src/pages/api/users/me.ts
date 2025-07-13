@@ -50,33 +50,6 @@ export const GET: APIRoute = async ({ request }) => {
 
 export const DELETE: APIRoute = async ({ request }) => {
   try {
-    // const authHeader = request.headers.get('authorization');
-
-    // if (!authHeader || Array.isArray(authHeader)) {
-    //   return new Response(
-    //     JSON.stringify({ success: false, message: "Invalid authorization header" }),
-    //     { status: 401 }
-    //   )
-    // }
-
-    // console.log('authHeader', authHeader);
-
-    // const token = authHeader.split(' ')[1];
-
-    // console.log(token);
-
-    // if (!token) {
-    //   return new Response(
-    //     JSON.stringify({ success: false, message: "No token provided" }),
-    //     { status: 401 }
-    //   )
-    // }
-
-    // const {
-    //   data: { user },
-    //   error: userError,
-    // } = await supabase.auth.getUser(token);
-
     const {
       data: { session },
       error: sessionError
@@ -98,6 +71,38 @@ export const DELETE: APIRoute = async ({ request }) => {
         JSON.stringify({ success: false, message: deleteError.message, error: deleteError }),
         { status: 500 }
       )
+    }
+
+    // Delete user's avatar files
+    // Step 1: List all files in the user's folder
+    const { data: files, error: listError } = await supabase
+      .storage
+      .from('avatars')
+      .list(`${session.user.id}`, { limit: 100 });
+
+    if (listError) {
+      return new Response(JSON.stringify({ success: false, message: "Failed to list files.", error: listError }), {
+        status: 500,
+      });
+    }
+
+    // Step 2: Construct file paths for deletion
+    const filePaths = files.map(file => `${session.user.id.toString()}/${file.name}`);
+
+    console.log('filepaths', filePaths);
+
+    // Step 3: Delete files
+    const { error: storageError } = await supabase
+      .storage
+      .from('avatars')
+      .remove(filePaths);
+
+    if (storageError) {
+      console.log(storageError);
+      return new Response(
+        JSON.stringify({ success: false, message: "Failed to delete avatar.", error: storageError }),
+        { status: 400 }
+      );
     }
 
     return new Response(

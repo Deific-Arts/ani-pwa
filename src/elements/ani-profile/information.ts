@@ -72,7 +72,6 @@ export default class AniInformation extends LitElement {
   }
 
   render() {
-    console.log(this.userState);
     return html`
       <kemet-card>
         <form @submit=${(event: SubmitEvent) => this.updateProfile(event)}>
@@ -204,6 +203,7 @@ export default class AniInformation extends LitElement {
 
     if (hasFile) {
       uploadFormData.append('files', this.filePond.getFile().file);
+      uploadFormData.append('uuid', this.userState.profile.uuid);
     }
 
     const uploadOptions = {
