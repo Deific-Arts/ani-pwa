@@ -30,7 +30,7 @@ export default class AniComment extends LitElement {
       }
       <div>
         ${this.comment.user.avatar
-          ? html`<img src="${API_URL}/${this.comment.user.avatar.url}" alt="${this.comment.user.username}" />`
+          ? html`<img src="${this.comment.user.avatar}" alt="${this.comment.user.username}" />`
           : html`<img src="https://placehold.co/80x80?text=${this.comment.user.username}" alt="${this.comment.user.username}" />`
         }
       </div>
@@ -53,11 +53,8 @@ export default class AniComment extends LitElement {
   }
 
   deleteComment() {
-    fetch(`${API_URL}/api/comments/${this.comment.documentId}`, {
+    fetch(`/api/comments/${this.comment.id}`, {
       method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${this.userState.user.jwt}`
-      }
     });
     this.setAttribute("hidden", '');
   }

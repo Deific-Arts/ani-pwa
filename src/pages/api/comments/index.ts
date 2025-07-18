@@ -31,3 +31,36 @@ export const GET: APIRoute = async ({ request }) => {
       { status: 500 })
   }
 }
+
+export const POST: APIRoute = async ({ request }) => {
+  const body = await request.json();
+
+  try {
+    const { data, error } = await supabase
+    .from('Comments')
+    .insert({
+      quote_id: body.quote_id,
+      comment: body.comment,
+      profile_id: body.profile_id,
+    })
+    .select('*')
+    .single();
+
+    if (error) {
+      return new Response(
+        JSON.stringify({ success: false, message: "Failed to create comment.", error }),
+        { status: 500 }
+      );
+    }
+
+    return new Response(
+      JSON.stringify({ success: true, message: "Comment created successfully.", data }),
+      { status: 200 }
+    );
+
+  } catch(error) {
+    return new Response(
+      JSON.stringify({ success: false, message: "An internal server error occurred." }),
+      { status: 500 })
+  }
+}

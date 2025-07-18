@@ -8,14 +8,13 @@ import { ENUM_ALERT_STATUS } from '../../shared/enums.ts';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
 import quoteStore, { type IQuoteStore } from '../../store/quote.ts';
-import 'kemet-ui/dist/components/kemet-field/kemet-field';
-import 'kemet-ui/dist/components/kemet-textarea/kemet-textarea';
-import 'kemet-ui/dist/components/kemet-count/kemet-count';
 import KemetTextarea from 'kemet-ui/dist/components/kemet-textarea/kemet-textarea';
 import { switchRoute } from '../../shared/utilities.ts';
 
+import 'kemet-ui/dist/components/kemet-field/kemet-field';
+import 'kemet-ui/dist/components/kemet-textarea/kemet-textarea';
+import 'kemet-ui/dist/components/kemet-count/kemet-count';
 
-const API_URL = import.meta.env.VITE_API_URL;
 
 @customElement('ani-post-comment')
 export default class AniPostComment extends LitElement {
@@ -49,7 +48,7 @@ export default class AniPostComment extends LitElement {
     if (isMember) {
       return html`
         <button aria-label="Close" @click=${() => this.modalsState.setCommentOpened(false)}><kemet-icon icon="x-lg" size="24"></kemet-icon></button>
-        <form method="post" action="api/comments" @submit=${(event: SubmitEvent) => this.handlePost(event)}>
+        <form @submit=${(event: SubmitEvent) => this.handlePost(event)}>
           <kemet-field slug="comment" label="What do you have to say?" message="Your comment cannot be blank">
             <kemet-textarea slot="input" name="comment" rows="5" rounded required filled></kemet-textarea>
             <kemet-count slot="component" message="characters remaining." limit="1000" validate-immediately></kemet-count>
@@ -71,7 +70,7 @@ export default class AniPostComment extends LitElement {
   }
 
   becomeAMemberButton() {
-    switchRoute('/membership/checkout');
+    window.location.href = '/membership/checkout';
     this.modalsState.setCommentOpened(false);
   }
 
@@ -80,11 +79,7 @@ export default class AniPostComment extends LitElement {
 
     const form = this.commentForm;
     const formData = new FormData(form);
-    const endpoint = this.commentForm.getAttribute('action');
-    const user = this.userState.profile;
     const commentTextarea = this.commentForm.querySelector('kemet-textarea') as KemetTextarea;
-
-    delete user.documentId;
 
     const options = {
       method: 'POST',
@@ -92,17 +87,15 @@ export default class AniPostComment extends LitElement {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        data: {
-          quoteId: this.modalsState.currentQuote?.id,
-          comment: formData.get('comment'),
-          user: user,
-        }
+        quote_id: this.modalsState.currentQuote?.id,
+        comment: formData.get('comment'),
+        profile_id: this.userState.profile.id,
       })
     }
 
     setTimeout(async () => {
       if (!commentTextarea.invalid) {
-        const commentResponse = await fetch(`${API_URL}/${endpoint}?populate=user`, options);
+        const commentResponse = await fetch(`/api/comments`, options);
         const { error, data } = await commentResponse.json();
 
         if (!error) {

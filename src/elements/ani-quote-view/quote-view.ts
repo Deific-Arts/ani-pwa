@@ -80,9 +80,9 @@ export default class AniQuoteView extends LitElement {
   }
 
   async getComments() {
-    const commentsResponse = await fetch(`${API_URL}/api/comments?filters[quoteId][$eq]=${this.quote.id}&populate=user.avatar`);
-    const { data } = await commentsResponse.json();
-    this.quoteState.addInitialComments(data);
+    const commentsResponse = await fetch(`/api/comments/${this.quote.id}`);
+    const comments = await commentsResponse.json();
+    this.quoteState.addInitialComments(comments);
   }
 
   makeComments() {
