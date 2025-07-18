@@ -9,8 +9,8 @@ import '../ani-quote/quote';
 import '../ani-comment/comment';
 import { switchRoute } from '../../shared/utilities';
 
-const API_URL = import.meta.env.VITE_API_URL;
-const APP_URL = window.location.origin;
+// const API_URL = import.meta.env.VITE_API_URL;
+// const APP_URL = window.location.origin;
 
 @customElement('ani-quote-view')
 export default class AniQuoteView extends LitElement {

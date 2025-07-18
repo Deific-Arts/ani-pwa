@@ -9,9 +9,7 @@ import sharedStyles from '../../shared/styles';
 import '../ani-like/like';
 import '../ani-comments/comments';
 import '../ani-requotes/requotes';
-import { switchRoute } from '../../shared/utilities';
 
-const API_URL = import.meta.env.VITE_API_URL;
 
 @customElement('ani-quote')
 export default class AniQuote extends LitElement {
@@ -110,22 +108,23 @@ export default class AniQuote extends LitElement {
   deleteQuote() {
     fetch(`/api/quotes/${this.quote.id}`, {
       method: 'DELETE',
-      // headers: {
-      //   Authorization: `Bearer ${this.userState.user.jwt}`
-      // }
+      body: JSON.stringify({
+        isRequote: this.isRequote,
+        originalQuoteId: this.quote.requote,
+        requotedBy: this.userState.profile?.id
+      })
     });
 
     if (this.isSingle) {
-      switchRoute('/home');
+      window.location.href = '/';
     } else {
       this.setAttribute("hidden", '');
     }
   }
 
   async fetchOriginalQuote() {
-    const { data } = await fetch(`${API_URL}/api/quotes/${this.quote.requote}?populate=*`)
+    this.originalQuote = await fetch(`/api/quotes/${this.quote.requote}`)
       .then(response => response.json());
-    this.originalQuote = data;
   }
 
   isMember() {
