@@ -9,12 +9,14 @@ import sharedStyles from '../../shared/styles';
 import '../ani-quote/quote';
 import '../ani-loader/loader';
 import KemetTabs from 'kemet-ui/dist/components/kemet-tabs/kemet-tabs';
+import { throttle } from '../../shared/utilities';
 
 @customElement('ani-feed')
 export default class AniFeed extends LitElement {
   static styles = [sharedStyles, styles];
 
   private handleScroll: () => void;
+  private throttledHandleScroll: () => void;
 
   @property({ type: String })
   feed: string = 'all';
@@ -52,6 +54,7 @@ export default class AniFeed extends LitElement {
     super();
 
     this.handleScroll = this.onScroll.bind(this);
+    this.throttledHandleScroll = throttle(this.handleScroll, 100);
 
     quoteStore.subscribe((state) => {
       this.quoteState = state;
@@ -61,12 +64,12 @@ export default class AniFeed extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener('scroll', this.throttledHandleScroll);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('scroll', this.throttledHandleScroll);
   }
 
   updated(changedProperties: Map<string, unknown>) {
@@ -96,9 +99,7 @@ export default class AniFeed extends LitElement {
   }
 
   onScroll() {
-    const tabsElement = document.querySelector('ani-app')
-      ?.shadowRoot?.querySelector('ani-home')
-      ?.shadowRoot?.querySelector('kemet-tabs') as KemetTabs;
+    const tabsElement = document.querySelector('ani-home')?.shadowRoot?.querySelector('kemet-tabs') as KemetTabs;
 
     const tabsOffset = tabsElement.offsetTop + tabsElement.clientHeight;
     const pageOffset = window.scrollY + window.innerHeight;
@@ -163,9 +164,10 @@ export default class AniFeed extends LitElement {
 
   async getQuotes(isPagination = false) {
     const quotesPerPage = '4';
-    const response = await fetch(`/api/quotes/${this.feed}?page=${this.currentPage}&limit=${quotesPerPage}&search=${this.quoteState.searchQuery}`);
-    const quotes = await response.json();
-    isPagination ? this.quoteState.addQuotes(quotes) : this.quoteState.addInitialQuotes(quotes);
+    const response = await fetch(`/api/quotes/${this.feed}?page=${this.currentPage}&pageSize=${quotesPerPage}&search=${this.quoteState.searchQuery}`);
+    const quotesResponse = await response.json();
+    this.pagination[this.feed] = quotesResponse.meta.pagination;
+    isPagination ? this.quoteState.addQuotes(quotesResponse.quotes) : this.quoteState.addInitialQuotes(quotesResponse.quotes);
   }
 }
 

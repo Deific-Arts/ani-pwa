@@ -84,7 +84,7 @@ export default class AniNewQuote extends LitElement {
             <kemet-button type="submit" variant="rounded" @click=${() => this.handleCancel()}>
               Cancel
             </kemet-button>
-            <kemet-button variant="circle" @click=${() => this.addQuote()} aria-label="Submit">
+            <kemet-button variant="circle" @click=${() => this.addQuote()} ?disabled=${!hasBooks} aria-label="Submit">
               <kemet-icon icon="send" size="24"></kemet-icon>
             </kemet-button>
           </footer>

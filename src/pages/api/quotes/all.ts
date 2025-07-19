@@ -6,7 +6,22 @@ import type { IQuote } from "../../../shared/interfaces";
 export const prerender = false;
 
 export const GET: APIRoute = async ({ request }) => {
+  const url = new URL(request.url);
+  const page = Number(url.searchParams.get('page')) ?? 1;
+  const pageSize = Number(url.searchParams.get('pageSize')) ?? 4;
+  const search = url.searchParams.get('search');
+
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+
   try {
+    const { count } = await supabase
+      .from('Quotes')
+      .select('*', { count: 'exact', head: true });
+
+    // total pages
+    const pageCount = Math.ceil((count ?? 0) / pageSize);
+
     const { data: quotes, error } = await supabase
       .from('Quotes')
       .select(`
@@ -21,7 +36,11 @@ export const GET: APIRoute = async ({ request }) => {
         requotes,
         book:Books (id, title, identifier),
         user:Profiles (id, username, email, avatar)
-      `);
+      `)
+      .limit(pageSize)
+      .range(from, to)
+      .ilike('quote', `%${search}%`)
+      .order('created_at', { ascending: false });
 
     if (quotes) {
       const { data: { publicUrl } } = supabase
@@ -29,7 +48,7 @@ export const GET: APIRoute = async ({ request }) => {
         .from('avatars')
         .getPublicUrl('');
 
-      const response = quotes.map((quote: any) => {
+      const quotesData = quotes.map((quote: any) => {
         return {
           ...quote,
           user: {
@@ -40,7 +59,12 @@ export const GET: APIRoute = async ({ request }) => {
       });
 
       return new Response(
-        JSON.stringify(response),
+        JSON.stringify({
+          quotes: quotesData,
+          meta: {
+            pagination: { page, pageCount, pageSize }
+          }
+        }),
         { status: 200 }
       );
     }

@@ -19,3 +19,35 @@ export const isObjectEmpty = <T extends object>(obj: T): boolean => {
 export const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
 export const isProduction = window.location.origin === 'https://anibookquotes.com';
+
+export const throttle = <T extends (...args: any[]) => void>(
+  func: T,
+  delay: number
+): T & { cancel: () => void } => {
+  let lastCall = 0;
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+
+  const throttled = ((...args: Parameters<T>) => {
+    const now = Date.now();
+
+    if (now - lastCall >= delay) {
+      lastCall = now;
+      func(...args);
+    } else if (!timeout) {
+      timeout = setTimeout(() => {
+        lastCall = Date.now();
+        timeout = null;
+        func(...args);
+      }, delay - (now - lastCall));
+    }
+  }) as T & { cancel: () => void };
+
+  throttled.cancel = () => {
+    if (timeout) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
+  };
+
+  return throttled;
+};
