@@ -25,22 +25,14 @@ export const GET: APIRoute = async ({ request }) => {
     const { data: quotes, error } = await supabase
       .from('Quotes')
       .select(`
-        id,
-        created_at,
-        quote,
-        requote,
-        page,
-        note,
-        private,
-        likes,
-        requotes,
-        book:Books (id, title, identifier),
-        user:Profiles (id, username, email, avatar)
+        *,
+        book:Books(id, title, identifier),
+        user:Profiles(id, username, email, avatar)
       `)
       .limit(pageSize)
       .range(from, to)
-      .ilike('quote', `%${search}%`)
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .or(`quote.ilike.%${search}%`);
 
     if (quotes) {
       const { data: { publicUrl } } = supabase

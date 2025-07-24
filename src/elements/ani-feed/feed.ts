@@ -3,13 +3,14 @@ import { customElement, property, state } from 'lit/decorators.js';
 import quoteStore, { type IQuoteStore } from '../../store/quote';
 import userStore, { type IUserStore } from '../../store/user';
 import appStore, { type IAppStore } from '../../store/app';
+import KemetTabs from 'kemet-ui/dist/components/kemet-tabs/kemet-tabs';
+import { throttle } from '../../shared/utilities';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
 
 import '../ani-quote/quote';
 import '../ani-loader/loader';
-import KemetTabs from 'kemet-ui/dist/components/kemet-tabs/kemet-tabs';
-import { throttle } from '../../shared/utilities';
+
 
 @customElement('ani-feed')
 export default class AniFeed extends LitElement {

@@ -44,7 +44,7 @@ export class AniSearch extends LitElement {
       if (hasFreePass || isMember) {
       return html`
         <form>
-          <kemet-field label="Search by content, book, or user" slug="search">
+          <kemet-field label="Search by quote contents" slug="search">
             <kemet-input
               id="search"
               slot="input"
