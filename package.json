@@ -13,7 +13,7 @@
     "@astrojs/node": "^9.2.2",
     "@astrojs/sitemap": "^3.4.1",
     "@lit/task": "^1.0.2",
-    "@stripe/stripe-js": "^7.3.1",
+    "@stripe/stripe-js": "^7.6.1",
     "@supabase/supabase-js": "^2.49.10",
     "@types/js-cookie": "^3.0.6",
     "astro": "^5.8.2",
@@ -33,7 +33,9 @@
     "kemet-ui": "^3.1.0",
     "lit": "^3.3.0",
     "marked": "^15.0.12",
+    "nodemailer": "^7.0.5",
     "sass-embedded": "^1.89.1",
+    "stripe": "^18.3.0",
     "typescript": "^5.8.3",
     "vite-plugin-lit-css": "^2.1.0",
     "zustand": "^5.0.5"

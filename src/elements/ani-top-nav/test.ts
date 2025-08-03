@@ -2,7 +2,6 @@ import { page } from '@vitest/browser/context';
 import { html, render } from 'lit';
 import { vi, expect, test, describe, beforeEach, afterEach } from 'vitest';
 import "@vitest/browser/matchers.d.ts";
-import { switchRoute } from '../../shared/utilities';
 import './top-nav';
 import 'kemet-ui/dist/components/kemet-icon/kemet-icon';
 import { fixtureProfile } from '../ani-profile/fixtures';

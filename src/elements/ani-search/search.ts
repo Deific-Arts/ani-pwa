@@ -7,7 +7,6 @@ import userStore, { type IUserStore } from '../../store/user';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
 import KemetInput from 'kemet-ui/dist/components/kemet-input/kemet-input';
-import { switchRoute } from '../../shared/utilities';
 
 @customElement('ani-search')
 export class AniSearch extends LitElement {
@@ -60,7 +59,7 @@ export class AniSearch extends LitElement {
         return html`
           <section>
             <p>Want to be able to easily search quotes by content, author, or book?</p>
-            <p><kemet-button variant="rounded" @click=${() => switchRoute('/membership/checkout')}>Become a member today</kemet-button></p>
+            <p><kemet-button variant="rounded" link="/membership/checkout">Become a member today</kemet-button></p>
           </section>
         `;
       }
@@ -69,7 +68,7 @@ export class AniSearch extends LitElement {
     return html`
       <section>
         <p>You must be logged in and a member to search quotes.</p>
-        <p><kemet-button variant="rounded" @click=${() => switchRoute('/login')}>Login to become a member</kemet-button></p>
+        <p><kemet-button variant="rounded" link="/login">Login to become a member</kemet-button></p>
       </section>
     `;
   }

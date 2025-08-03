@@ -51,6 +51,7 @@ export default class AniUserView extends LitElement {
   }
 
   render() {
+    console.log(this.user);
     return html`
       <hr />
       ${this.user && this.hasFetchedUser ?

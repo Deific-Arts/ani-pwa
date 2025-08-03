@@ -9,7 +9,6 @@ import styles from './styles';
 import sharedStyles from '../../shared/styles';
 import quoteStore, { type IQuoteStore } from '../../store/quote.ts';
 import KemetTextarea from 'kemet-ui/dist/components/kemet-textarea/kemet-textarea';
-import { switchRoute } from '../../shared/utilities.ts';
 
 import 'kemet-ui/dist/components/kemet-field/kemet-field';
 import 'kemet-ui/dist/components/kemet-textarea/kemet-textarea';

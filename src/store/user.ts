@@ -31,13 +31,16 @@ const getProfile = async () => {
 
   return;
 }
-const profileResponse = await getProfile();
 
 const isLoggedIn = async () => await fetch('/api/auth/authorized').then(response => response.json());
 const isLoggedInResponse = await isLoggedIn();
 
-const getAvatar = async () => await fetch(`/api/users/avatar?filePath=${profileResponse.avatar ? profileResponse.avatar : ''}`).then(response => response.json());
-const avatarResponse = await getAvatar();
+const profileResponse = isLoggedInResponse ? await getProfile() : null;
+
+const getAvatar = profileResponse
+  ? async () => await fetch(`/api/users/avatar?filePath=${profileResponse.avatar ? profileResponse.avatar : ''}`).then(response => response.json())
+  : null;
+const avatarResponse = getAvatar ? await getAvatar() : null;
 
 const store = createStore<IUserStore>(set => ({
   profile: { ...profileResponse, avatar: avatarResponse },

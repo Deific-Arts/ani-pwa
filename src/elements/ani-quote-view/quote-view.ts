@@ -7,10 +7,6 @@ import sharedStyles from '../../shared/styles';
 
 import '../ani-quote/quote';
 import '../ani-comment/comment';
-import { switchRoute } from '../../shared/utilities';
-
-// const API_URL = import.meta.env.VITE_API_URL;
-// const APP_URL = window.location.origin;
 
 @customElement('ani-quote-view')
 export default class AniQuoteView extends LitElement {
@@ -53,7 +49,7 @@ export default class AniQuoteView extends LitElement {
         `
         : html`
           <p>Could not find the requested quote.</p>
-          <kemet-button variant="rounded" @click=${() => switchRoute('/home')}>Go home</kemet-button>
+          <kemet-button variant="rounded" link="/home">Go home</kemet-button>
         `
       }
     `

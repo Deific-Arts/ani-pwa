@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import 'dotenv/config'
 import { supabase, supabaseAdmin } from "../../../shared/database";
+import { getStripe } from "../../../shared/utilities";
 
 export const prerender = false;
 
@@ -49,7 +50,13 @@ export const GET: APIRoute = async ({ request }) => {
 }
 
 export const DELETE: APIRoute = async ({ request }) => {
+  // const url = new URL(request.url);
+  // const origin = url.origin;
+
   try {
+    const body = await request.json();
+    const { member_id } = body;
+
     const {
       data: { session },
       error: sessionError
@@ -89,19 +96,40 @@ export const DELETE: APIRoute = async ({ request }) => {
     // Step 2: Construct file paths for deletion
     const filePaths = files.map(file => `${session.user.id.toString()}/${file.name}`);
 
-    console.log('filepaths', filePaths);
-
     // Step 3: Delete files
-    const { error: storageError } = await supabase
-      .storage
-      .from('avatars')
-      .remove(filePaths);
+    if (filePaths.length > 0) {
+      const { error: storageError } = await supabase
+        .storage
+        .from('avatars')
+        .remove(filePaths);
 
-    if (storageError) {
-      console.log(storageError);
+      if (storageError) {
+        console.log(storageError);
+        return new Response(
+          JSON.stringify({ success: false, message: "Failed to delete avatar.", error: storageError }),
+          { status: 400 }
+        );
+      }
+    }
+
+    // Delete user's membership
+    try {
+      if (member_id) {
+        const subscriptions = await getStripe().subscriptions.list({
+          customer: member_id
+        });
+
+        const subscriptionIds = subscriptions.data.map(subscription => subscription.id);
+
+        await Promise.all(
+          subscriptionIds.map(id => getStripe().subscriptions.cancel(id))
+        );
+      }
+    } catch(error) {
+      console.log(error);
       return new Response(
-        JSON.stringify({ success: false, message: "Failed to delete avatar.", error: storageError }),
-        { status: 400 }
+        JSON.stringify({ success: false, message: "Failed to delete membership.", error }),
+        { status: 500 }
       );
     }
 

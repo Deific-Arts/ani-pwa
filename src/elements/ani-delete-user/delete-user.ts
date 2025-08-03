@@ -35,41 +35,12 @@ export class AniDeleteUser extends LitElement {
   }
 
   async handleRemoveAccount() {
-    // if (!!this.userState.profile.member_id) {
-    //   const cancelRequest = await fetch(`${API_URL}/api/qenna/cancel-membership`, {
-    //     method: "POST",
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'Authorization': `Bearer ${this.userState.user.jwt}`
-    //     },
-    //     body: JSON.stringify({
-    //       member_id: this.userState.profile.member_id || ''
-    //     })
-    //   });
-
-    //   const cancelResponse = await cancelRequest.json();
-
-    //   if (cancelResponse.error) {
-    //     this.alertState.setStatus('error');
-    //     this.alertState.setMessage(cancelResponse.message);
-    //     this.alertState.setOpened(true);
-    //     this.alertState.setIcon('exclamation-circle');
-    //   } else {
-    //     this.deleteAccount();
-    //   }
-    // } else {
-    //   this.deleteAccount()
-    // }
-    this.deleteAccount();
-  }
-
-  async deleteAccount() {
     const deleteRequest = await fetch(`/api/users/me`, {
       method: "DELETE",
       headers: {
         'Content-Type': 'application/json',
-        // 'Authorization': `Bearer ${this.userState.profile.session?.access_token}`
       },
+      body: JSON.stringify({ member_id: this.userState.profile.member_id })
     });
 
     const deleteResponse = await deleteRequest.json();

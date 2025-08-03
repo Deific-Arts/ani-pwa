@@ -14,7 +14,6 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import FilePondPluginImageCrop from 'filepond-plugin-image-crop';
 import FilePondPluginImageResize from 'filepond-plugin-image-resize';
 import FilePondPluginImageTransform from 'filepond-plugin-image-transform';
-import { switchRoute } from '../../shared/utilities.ts';
 
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -87,7 +86,7 @@ export default class AniInformation extends LitElement {
                 <kemet-button variant="text" @click=${() => this.userState.logout()}>Log Out</kemet-button>
                 ${!!this.userState.profile.member_id
                   ? html`&nbsp;|&nbsp;<kemet-button variant="text" @click=${() => this.handleManageMembership()}>Manage Membership</kemet-button>`
-                  : html`&nbsp;|&nbsp;<kemet-button variant="text" @click=${() => switchRoute('/membership/checkout')}>Become a Member</kemet-button>`
+                  : html`&nbsp;|&nbsp;<kemet-button variant="text" link="/membership/checkout">Become a Member</kemet-button>`
                 }
               </p>
               <hr /><br />
@@ -238,7 +237,7 @@ export default class AniInformation extends LitElement {
   }
 
   async handleManageMembership() {
-    const response = await fetch(`${API_URL}/api/qenna/create-portal-session`, {
+    const response = await fetch(`/api/stripe/create-portal-session`, {
       method: "POST",
       body: JSON.stringify({
         member_id: this.userState.profile.member_id || ''

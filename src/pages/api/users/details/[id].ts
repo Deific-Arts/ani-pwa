@@ -48,7 +48,7 @@ export const GET: APIRoute = async ({ params }) => {
       ...profile,
       books,
       counts: { quotes: quotesCount, followers: followerCount, following: profile.following?.length || 0 },
-      avatar: publicUrl
+      avatar: profile.avatar ? publicUrl : null
     };
 
     return new Response(
