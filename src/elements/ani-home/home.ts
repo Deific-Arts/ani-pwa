@@ -3,10 +3,12 @@ import { customElement, state } from 'lit/decorators.js';
 import modalsStore, { type IModalsStore } from '../../store/modals';
 import userStore, { type IUserStore } from '../../store/user';
 import quoteStore, { type IQuoteStore } from '../../store/quote';
+import AniFeed from '../ani-feed/feed';
 import styles from './styles';
 
+import '../ani-loader/loader';
 import '../ani-feed/feed';
-import AniFeed from '../ani-feed/feed';
+
 
 @customElement('ani-home')
 export default class AniHome extends LitElement {
@@ -46,19 +48,21 @@ export default class AniHome extends LitElement {
         <kemet-tab slot="tab">Liked</kemet-tab>
         <kemet-tab-panel slot="panel">
           <br />
-          <ani-feed feed="all" current=${this.currentTab}></ani-feed>
+          <ani-feed feed="all" current=${this.currentTab}>
+            <p><ani-loader loading></ani-loader></p>
+          </ani-feed>
         </kemet-tab-panel>
         <kemet-tab-panel slot="panel">
           <br />
-          ${this.currentTab === 'following' ? html`<ani-feed feed="following" current=${this.currentTab}></ani-feed>` : ''}
+          ${this.currentTab === 'following' ? html`<ani-feed feed="following" current=${this.currentTab}><p><ani-loader loading></ani-loader></p></ani-feed>` : ''}
         </kemet-tab-panel>
         <kemet-tab-panel slot="panel">
           <br />
-          ${this.currentTab === 'mine' ? html`<ani-feed feed="mine" current=${this.currentTab}></ani-feed>` : ''}
+          ${this.currentTab === 'mine' ? html`<ani-feed feed="mine" current=${this.currentTab}><p><ani-loader loading></ani-loader></p></ani-feed>` : ''}
         </kemet-tab-panel>
         <kemet-tab-panel slot="panel">
           <br />
-          ${this.currentTab === 'liked' ? html`<ani-feed feed="liked" current=${this.currentTab}></ani-feed>` : ''}
+          ${this.currentTab === 'liked' ? html`<ani-feed feed="liked" current=${this.currentTab}><p><ani-loader loading></ani-loader></p></ani-feed>` : ''}
         </kemet-tab-panel>
       </kemet-tabs>
 
@@ -85,7 +89,6 @@ export default class AniHome extends LitElement {
     this.currentTab = event.detail.innerText.toLowerCase();
     const currentFeedElement = this.shadowRoot?.querySelector('ani-feed') as AniFeed;
     currentFeedElement.current = this.currentTab;
-    // currentFeedElement.currentPage[this.currentTab] = 1;
     currentFeedElement.getQuotes();
   }
 }

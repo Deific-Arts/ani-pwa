@@ -20,7 +20,7 @@ export default class AniFeed extends LitElement {
   private throttledHandleScroll: () => void;
 
   @property({ type: String })
-  feed: string = 'all';
+  feed: string | null = null;
 
   @property({ type: String })
   current: string = 'all';
@@ -40,6 +40,14 @@ export default class AniFeed extends LitElement {
     following: {},
     mine: {},
     liked: {},
+  }
+
+  @state()
+  hasLoaded: any = {
+    all: false,
+    following: false,
+    mine: false,
+    liked: false,
   }
 
   @state()
@@ -84,19 +92,31 @@ export default class AniFeed extends LitElement {
   }
 
   render() {
-    if (this.quoteState.quotes?.length > 0) {
+    const hasQuotes = this.quoteState.quotes?.length > 0;
+    const hasLoaded = this.hasLoaded[this.feed as string];
+
+    if (hasQuotes) {
       return html`<ul>${this.quoteState.quotes.map(quote => html`<li><ani-quote .quote=${quote}></ani-quote></li>`)}`;
-    } else {
-      if (this.searchQuery) {
-        return html`<p>We could not find any quotes, but you're searching for <strong>${this.searchQuery}</strong>. Try clearing the search for better results.</p>`;
-      } else {
-        if (this.appState.fetchedTabs.includes('mine')) {
+    }
+
+    if (!hasQuotes && this.searchQuery) {
+      return html`<p>We could not find any quotes, but you're searching for <strong>${this.searchQuery}</strong>. Try clearing the search for better results.</p>`;
+    }
+
+    if (!hasQuotes && hasLoaded) {
+      switch (this.feed) {
+        case "mine":
           return html`<p>Looks like you haven't added any quotes yet.</p>`;
-        } else {
-          return html`<p><ani-loader loading></ani-loader></p>`
-        }
+        case "following":
+          return html`<p>Looks like the people you follow haven't added any quotes yet.</p>`;
+        case "liked":
+          return html`<p>Looks like you haven't liked any quotes yet.</p>`;
+        default:
+          return html`<p>Wow. Its awfully silent in here.</p>`;
       }
     }
+
+    return html`<p><ani-loader loading></ani-loader></p>`;
   }
 
   onScroll() {
@@ -112,63 +132,16 @@ export default class AniFeed extends LitElement {
     }
   }
 
-  // search by whether or not the user, book, or quote contain the search query
-  // async getQuotes(isPagination = false) {
-  //   this.appState.setFetchedTabs(this.current);
-  //   const quotesPerPage = '4';
-  //   const searchParams = this.quoteState.searchQuery ? `&filters[$or][0][quote][$contains]=${this.quoteState.searchQuery}&filters[$or][1][book][title][$contains]=${this.quoteState.searchQuery}&filters[$or][2][user][username][$contains]=${this.quoteState.searchQuery}` : '';
-  //   let filters;
-
-  //   switch(this.feed) {
-  //     case "following" :
-  //       filters = this.setFollowingUsers();
-  //       break;
-  //     case "mine" :
-  //       filters = `&filters[$and][0][user][id][$eq]=${this.userState.user.user.id}`;
-  //       break;
-  //     case "liked" :
-  //       filters = `&filters[$and][0][likes][$containsi]=${this.userState.user.user.id}`;
-  //       break;
-  //     default :
-  //       filters = '';
-  //   }
-
-  //   const response = await fetch(`${API_URL}/api/quotes?${searchParams}&pagination[pageSize]=${quotesPerPage}&pagination[page]=${this.currentPage[this.current]}${filters}`);
-  //   const { data, meta } = await response.json();
-
-  //   this.pagination[this.feed] = meta.pagination;
-
-  //   switch(this.feed) {
-  //     case 'following' :
-  //       this.quoteState.addFollowingQuotes(data);
-  //       break;
-  //     case 'mine' :
-  //       isPagination ? this.quoteState.addMineQuotes(data) : this.quoteState.addInitialMineQuotes(data);
-  //       break;
-  //     case 'liked' :
-  //       isPagination ? this.quoteState.addLikedQuotes(data) : this.quoteState.addInitialLikedQuotes(data);
-  //       break;
-  //     default :
-  //       isPagination ? this.quoteState.addQuotes(data) : this.quoteState.addInitialQuotes(data);
-  //   }
-  // }
-
-  // setFollowingUsers() {
-  //   let users: string = '';
-
-  //   this.userState.profile.following && this.userState.profile.following.forEach((user) => {
-  //     users += `&filters[$and][0][user][id][$eq]=${user}`;
-  //   });
-
-  //   return !!users ? users : '&filters[$and][0][user][id][$eq]=0';
-  // }
-
   async getQuotes(isPagination = false) {
-    const quotesPerPage = '4';
-    const response = await fetch(`/api/quotes/${this.feed}?page=${this.currentPage}&pageSize=${quotesPerPage}&search=${this.quoteState.searchQuery}`);
-    const quotesResponse = await response.json();
-    this.pagination[this.feed] = quotesResponse.meta.pagination;
-    isPagination ? this.quoteState.addQuotes(quotesResponse.quotes) : this.quoteState.addInitialQuotes(quotesResponse.quotes);
+    if (this.feed) {
+      const quotesPerPage = '4';
+      const searchParams = this.quoteState.searchQuery ? `&search=${this.quoteState.searchQuery}` : '';
+      const response = await fetch(`/api/quotes/${this.feed}?page=${this.currentPage}&pageSize=${quotesPerPage}${searchParams}`);
+      const quotesResponse = await response.json();
+      this.pagination[this.feed] = quotesResponse.meta.pagination;
+      isPagination ? this.quoteState.addQuotes(quotesResponse.quotes) : this.quoteState.addInitialQuotes(quotesResponse.quotes);
+      this.hasLoaded[this.feed] = true;
+    }
   }
 }
 
