@@ -23,7 +23,7 @@ export const POST: APIRoute = async ({ request }) => {
           quantity: 1,
         },
       ],
-      customer_email: body.email,
+      ...(body.email && { customer_email: body.email }),
       mode: 'subscription',
       ui_mode: "embedded",
       return_url: `${origin}/membership/success?session_id={CHECKOUT_SESSION_ID}`,

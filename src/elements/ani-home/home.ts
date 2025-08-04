@@ -79,7 +79,9 @@ export default class AniHome extends LitElement {
         <kemet-tab slot="tab">All</kemet-tab>
         <kemet-tab-panel slot="panel">
           <br />
-          <ani-feed></ani-feed>
+          <ani-feed feed="all" current=${this.currentTab}>
+            <p><ani-loader loading></ani-loader></p>
+          </ani-feed>
         </kemet-tab-panel>
       </kemet-tabs>
     `
