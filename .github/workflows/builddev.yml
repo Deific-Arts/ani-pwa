@@ -51,7 +51,7 @@ jobs:
           sshpass -p ${{ secrets.SSH_PASSWORD }} ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} <<EOF
           echo "Running commands on VPS"
           cd ~/sites
-          git clone git@github.com:hasanirogers/ani-pwa.git ani-pwa-dev --branch develop
+          git clone git@github.com:Deific-Arts/ani-pwa.git ani-pwa-dev --branch develop
           cd ~/sites/ani-pwa-dev
           cat > .env <<EOL
           NODE_ENV=development
