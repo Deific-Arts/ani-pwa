@@ -7,17 +7,15 @@ export const prerender = false;
 export const POST: APIRoute = async ({ request }) => {
   const url = new URL(request.url);
   const origin = url.origin;
-  const data = await request.json();
-  const { identifier } = data;
+  const body = await request.json();
+  const { accessToken, refreshToken } = body;
 
   try {
-    const { data, error } = await supabase.auth.signInWithOtp({
-      email: identifier,
-      options: {
-        shouldCreateUser: true,
-        emailRedirectTo: `${origin}/login/callback`,
-      }
+    const { data, error } = await supabase.auth.setSession({
+      access_token: accessToken,
+      refresh_token: refreshToken,
     });
+
 
     if (error) {
       return new Response(
@@ -27,7 +25,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     return new Response(
-      JSON.stringify({ success: true, message: 'Success!', user: data.user, session: data.session }),
+      JSON.stringify({ success: true, message: 'OK', data }),
       { status: 200 }
     );
   } catch(error) {

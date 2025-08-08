@@ -8,7 +8,7 @@ export const GET: APIRoute = async ({ request }) => {
   const url = new URL(request.url);
   const page = Number(url.searchParams.get('page')) ?? 1;
   const pageSize = Number(url.searchParams.get('pageSize')) ?? 4;
-  const search = url.searchParams.get('search');
+  const search = url.searchParams.get('search') ?? '';
   const origin = url.origin;
 
   const me = await fetch(`${origin}/api/users/me`).then(response => response.json());
