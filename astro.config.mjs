@@ -3,11 +3,15 @@ import { defineConfig } from 'astro/config';
 import node from '@astrojs/node';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
 
 let site;
 let port;
 
-switch (import.meta.env.PUBLIC_RUNTIME_ENVIRONMENT) {
+switch (process.env.PUBLIC_RUNTIME_ENVIRONMENT) {
   case 'development':
     port = 4323;
     site = "https://dev.anibookquotes.com";
