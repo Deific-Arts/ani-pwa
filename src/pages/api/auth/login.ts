@@ -15,7 +15,7 @@ export const POST: APIRoute = async ({ request }) => {
       email: identifier,
       options: {
         shouldCreateUser: true,
-        emailRedirectTo: `${origin}/login/callback`,
+        emailRedirectTo: `${origin}/callbacks/email`,
       }
     });
 
