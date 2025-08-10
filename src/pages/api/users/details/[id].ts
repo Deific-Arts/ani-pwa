@@ -70,6 +70,8 @@ export const PUT: APIRoute = async ({ params, request }) => {
 
     delete body.filepond;
 
+    console.log(body);
+
     const { error } = await supabase
       .from('Profiles')
       .update(body)
