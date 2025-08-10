@@ -51,7 +51,8 @@ export default class AniUserView extends LitElement {
   }
 
   render() {
-    console.log(this.user);
+    const displayName = this.user.username ?? this.user.email;
+
     return html`
       <hr />
       ${this.user && this.hasFetchedUser ?
@@ -59,17 +60,17 @@ export default class AniUserView extends LitElement {
           <header>
             <div>
               ${this.user.avatar
-                ? html`<img class="profile" src="${this.user.avatar}" alt="${this.user.username}" />`
-                : html`<img class="profile" src="https://placehold.co/80x80?text=${this.user.username}" alt="${this.user?.username}" />`
+                ? html`<img class="profile" src="${this.user.avatar}" alt="${displayName}" />`
+                : html`<img class="profile" src="https://placehold.co/80x80?text=${displayName}" alt="${displayName}" />`
               }
               ${this.userState.isLoggedIn && this.user.id !== this.userState.profile?.id ? html`
-                <kemet-button variant="circle" outlined title="Follow ${this.user.username}" @click=${() => this.handleFollow()}>
+                <kemet-button variant="circle" outlined title="Follow ${displayName}" @click=${() => this.handleFollow()}>
                   <kemet-icon icon="${this.follow ? 'person-fill-dash' : 'person-fill-add'}" size="24"></kemet-icon>
                 </kemet-button>
               ` : null}
             </div>
             <div>
-              <h2>${this.user.username}</h2>
+              <h2>${displayName}</h2>
               <aside>
                 <span>${this.user.counts?.quotes} quotes</span>
                 <span>${this.user.counts?.followers} followers</span>

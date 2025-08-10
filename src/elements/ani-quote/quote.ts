@@ -38,22 +38,27 @@ export default class AniQuote extends LitElement {
   }
 
   render() {
-    return this.quote && this.quote.user ? html`
+    if (!this.quote || !this.quote.user) return null;
+
+    const displayName = this.quote.user.username ?? this.quote.user.email;
+    const displayNameOriginal = this.isRequote ? this.originalQuote.user.username ?? this.originalQuote.user.email : '';
+
+    return html`
       ${this.quote.user.id === this.userState.profile?.id
         ? html`<button aria-label="Delete"><kemet-icon icon="x-lg" size="16" @click=${() => this.deleteQuote()}></kemet-icon></button>`
         : null
       }
       <header>
         <a aria-label="Avatar" href=${`/user/${this.quote.user.id}`}>
-          ${this.quote.user.avatar
-            ? html`<img src="${this.quote.user.avatar}" alt="${this.quote.user.username}" />`
-            : html`<img src="https://placehold.co/80x80?text=${this.quote.user.username}" alt="${this.quote?.user?.username}" />`
+          ${!!this.quote.user.avatar
+            ? html`<img src="${this.quote.user.avatar}" alt="${displayName}" />`
+            : html`<img src="https://placehold.co/80x80?text=${displayName}" alt="${displayName}" />`
           }
         </a>
         <div>
           ${this.isRequote && this.originalQuote
-            ? html`<strong>${this.quote.user.username}${this.isMember()}</strong> <span>requoted ${this.originalQuote.user.username} ${this.displayDate()} ago</span>`
-            : html`<strong>${this.quote.user.username}${this.isMember()}</strong> <span>quoted ${this.displayDate()} ago</span>`
+            ? html`<strong>${displayName}${this.isMember()}</strong> <span>requoted ${displayNameOriginal} ${this.displayDate()} ago</span>`
+            : html`<strong>${displayName}${this.isMember()}</strong> <span>quoted ${this.displayDate()} ago</span>`
           }
         </div>
       </header>
@@ -84,7 +89,7 @@ export default class AniQuote extends LitElement {
         `}
         ${this.makeLink()}
       </footer>
-    ` : null
+    `
   }
 
   displayDate() {

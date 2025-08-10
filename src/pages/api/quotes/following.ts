@@ -55,7 +55,7 @@ export const GET: APIRoute = async ({ request }) => {
           ...quote,
           user: {
             ...quote.user,
-            avatar: `${publicUrl}/${quote.user.avatar}`
+            avatar: !!quote.user.avatar ? `${publicUrl}/${quote.user.avatar}` : null
           }
         }
       });

@@ -71,11 +71,12 @@ export default class AniInformation extends LitElement {
   }
 
   render() {
+    const displayName = this.userState?.profile?.username ?? this.userState?.profile?.email;
     return html`
       <kemet-card>
         <form @submit=${(event: SubmitEvent) => this.updateProfile(event)}>
           <fieldset>
-            <legend>Welcome, ${this.userState?.profile?.username}</legend>
+            <legend>Welcome, ${displayName}</legend>
             <section class="profile">
               <br />
               <div class="profile-image">${this.makeProfileImage()}</div>
