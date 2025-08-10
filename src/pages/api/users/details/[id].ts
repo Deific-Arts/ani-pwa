@@ -14,20 +14,52 @@ export const GET: APIRoute = async ({ params }) => {
       .eq('id', userId)
       .single();
 
+    if (profileError ) {
+      console.log({ errors: { profileError } });
+      return new Response(
+        JSON.stringify({ success: false, message: "Failed to get profile.", error: profileError }),
+        { status: 500 }
+      );
+    }
+
     const { data: books, error: booksError } = await supabase
       .from('Books')
       .select('*')
       .in('id', profile.book_ids);
+
+    if (booksError ) {
+      console.log({ errors: { booksError } });
+      return new Response(
+        JSON.stringify({ success: false, message: "Failed to get profile.", error: booksError }),
+        { status: 500 }
+      );
+    }
 
     const { data: quotes, error: quotesError, count: quotesCount } = await supabase
       .from('Quotes')
       .select('*', { count: 'exact'})
       .eq('user_id', userId);
 
+    if (quotesError ) {
+      console.log({ errors: { quotesError } });
+      return new Response(
+        JSON.stringify({ success: false, message: "Failed to get profile.", error: quotesError }),
+      { status: 500 }
+      );
+    }
+
     const { data: followers, error: followersError } = await supabase
       .from('Profiles')
       .select('*')
       .filter('following', 'cs', parseInt(userId as string));
+
+    if (followersError ) {
+      console.log({ errors: { followersError } });
+      return new Response(
+        JSON.stringify({ success: false, message: "Failed to get profile.", error: followersError }),
+      { status: 500 }
+      );
+    }
 
     const followerCount = followers?.length ?? 0;
 
@@ -35,14 +67,6 @@ export const GET: APIRoute = async ({ params }) => {
       .storage
       .from('avatars')
       .getPublicUrl(profile.avatar);
-
-    if (profileError || booksError || quotesError || followersError) {
-      console.log({ errors: { profileError, booksError, quotesError, followersError } });
-      return new Response(
-        JSON.stringify({ success: false, message: "Failed to get profile.", errors: { profileError, booksError, quotesError, followersError } }),
-      { status: 500 }
-      );
-    }
 
     const data = {
       ...profile,
@@ -69,8 +93,6 @@ export const PUT: APIRoute = async ({ params, request }) => {
     const body = await request.json();
 
     delete body.filepond;
-
-    console.log(body);
 
     const { error } = await supabase
       .from('Profiles')
