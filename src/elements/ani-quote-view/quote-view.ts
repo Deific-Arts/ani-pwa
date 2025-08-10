@@ -1,6 +1,6 @@
 import { LitElement, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import type { IComment, IQuote } from '../../shared/interfaces';
+import type { IComment } from '../../shared/interfaces';
 import quoteStore, { type IQuoteStore } from '../../store/quote';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
@@ -13,13 +13,7 @@ export default class AniQuoteView extends LitElement {
   static styles = [styles, sharedStyles];
 
   @property()
-  id: string = '';
-
-  @state()
-  quote!: IQuote;
-
-  @state()
-  hasFetchedQuote: boolean = false;
+  quote: string | null = null;
 
   @state()
   comments: IComment[] = [];
@@ -36,47 +30,32 @@ export default class AniQuoteView extends LitElement {
   }
 
   firstUpdated() {
-    this.getQuote();
+    this.getComments();
   }
 
   render() {
+    const quote = this.quote ? JSON.parse(this.quote) : null;
     return html`
       <hr />
-      ${this.quote && this.hasFetchedQuote ?
+      ${quote ?
         html `
-          <ani-quote .quote=${this.quote}></ani-quote>
+          <ani-quote .quote=${quote}></ani-quote>
           <ul>${this.makeComments()}</ul>
         `
         : html`
-          <p>Could not find the requested quote.</p>
-          <kemet-button variant="rounded" link="/home">Go home</kemet-button>
+          <ani-not-found>
+            <p>Oh boy, we couldn't find that quote.</p>
+            <kemet-button variant="rounded" link="/">Go home</kemet-button>
+          </ani-not-found>
         `
       }
     `
   }
 
-  async getQuote() {
-    const path = location.pathname.split('/');
-    const metaDescription = document.querySelector('meta[name="description"]') as HTMLMetaElement;
-    const metaPropertyTitle = document.querySelector('meta[property="og:title"]') as HTMLMetaElement;
-    const metaPropertyUrl = document.querySelector('meta[property="og:url"]') as HTMLMetaElement;
-
-    this.id = !!this.id ? this.id : path[path.length - 1];
-    const response = await fetch(`/api/quotes/${this.id}`);
-    this.hasFetchedQuote = true;
-    this.quote = await response.json();
-
-    document.title = `A quote by ${this.quote.user.username} | Ani Book Quotes`;
-    if (metaDescription) metaDescription.content = `"${this.quote.quote}" - ${this.quote.book.title}`;
-    if (metaPropertyTitle) metaPropertyTitle.content = `A quote by ${this.quote.user.username} | Ani Book Quotes`;
-    if (metaPropertyUrl) metaPropertyUrl.content = `/quote/${this.quote.id}`;
-
-    // we need quote data before we get comments
-    this.getComments();
-  }
-
   async getComments() {
-    const commentsResponse = await fetch(`/api/comments/${this.quote.id}`);
+    const quote = this.quote ? JSON.parse(this.quote) : null;
+    if (!quote) return;
+    const commentsResponse = await fetch(`/api/comments/${quote.id}`);
     const comments = await commentsResponse.json();
     this.quoteState.addInitialComments(comments);
   }

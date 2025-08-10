@@ -9,10 +9,10 @@ interface Props {
 	image?: string;
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const META_TITLE = `${SITE_TITLE} | ${SITE_DESCRIPTION}`;
-
 const { title, description, image = '/mask-icon.png' } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const META_TITLE = title ?? `${SITE_TITLE} | ${SITE_DESCRIPTION}`;
 ---
 
 <!-- Global Metadata -->

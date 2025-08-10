@@ -15,4 +15,12 @@ export default css`
     padding: 0;
     list-style: none;
   }
+
+  ani-not-found {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
 `;
