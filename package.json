@@ -7,7 +7,11 @@
     "build": "astro build",
     "dev": "astro dev",
     "preview": "astro preview",
-    "serve": "node ./dist/server/entry.mjs"
+    "serve": "node ./dist/server/entry.mjs",
+    "supabase": "supabase",
+    "supabase:link": "supabase link",
+    "supabase:unlink": "supabase unlink",
+    "supabase:dump": "supabase db dump -s --file dump_schema.sql"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.0",
@@ -42,6 +46,7 @@
     "zustand": "^5.0.5"
   },
   "devDependencies": {
-    "@types/nodemailer": "^6.4.17"
+    "@types/nodemailer": "^6.4.17",
+    "supabase": "^2.33.9"
   }
 }

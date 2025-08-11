@@ -103,8 +103,8 @@ export default class AniInformation extends LitElement {
                   </kemet-field>
                 </p>
                 <p>
-                  <kemet-field label="Email" slug="email">
-                    <kemet-input slot="input" name="email" rounded filled value=${this.userState?.profile?.email}></kemet-input>
+                  <kemet-field label="Username" slug="username">
+                    <kemet-input slot="input" name="username" rounded filled value=${this.userState?.profile?.username}></kemet-input>
                   </kemet-field>
                 </p>
                 <p>
