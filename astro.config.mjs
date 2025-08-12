@@ -1,9 +1,9 @@
-// @ts-check
+/** @type {import('@vite-pwa/astro').PWAOptions} */
 import { defineConfig } from 'astro/config';
 import node from '@astrojs/node';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
-import VitePWA from '@vite-pwa/astro';
+import AstroPWA from '@vite-pwa/astro'
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -26,7 +26,8 @@ switch (process.env.PUBLIC_RUNTIME_ENVIRONMENT) {
     site = `http://localhost:${port}`;
 }
 
-const vitePWAIntegration = VitePWA({
+
+const pwaConfig = {
   registerType: 'autoUpdate',
   includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
   manifest: {
@@ -81,12 +82,12 @@ const vitePWAIntegration = VitePWA({
       }
     }]
   }
-});
+};
 
 // https://astro.build/config
 export default defineConfig({
 	site,
-	integrations: [mdx(), sitemap(), vitePWAIntegration],
+	integrations: [mdx(), sitemap(), AstroPWA(pwaConfig)],
   output: 'server',
   adapter: node({ mode: 'standalone' }),
   server: { port }
