@@ -1,0 +1,14 @@
+---
+const GA_TRACKING_ID = 'G-KYPKE40MVT';
+---
+
+<script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}></script>
+<script is:inline define:vars={{ GA_TRACKING_ID }}>
+  // Pure JavaScript - no TypeScript syntax
+  const w = window;
+  w.dataLayer = w.dataLayer || [];
+  function gtag() { w.dataLayer.push(arguments); }
+  w.gtag = gtag;
+  gtag('js', new Date());
+  gtag('config', GA_TRACKING_ID);
+</script>

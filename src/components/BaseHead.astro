@@ -2,6 +2,7 @@
 import 'kemet-ui/dist/styles/kemet.base.scss';
 import '../styles/global.scss';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import GoogleAnalytics from './GoogleAnalytics.astro';
 
 interface Props {
 	title: string;
@@ -20,14 +21,13 @@ const META_TITLE = title ?? `${SITE_TITLE} | ${SITE_DESCRIPTION}`;
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="manifest" href="/manifest.webmanifest" />
 <link rel="sitemap" href="/sitemap-index.xml" />
-<link
-	rel="alternate"
-	type="application/rss+xml"
-	title={META_TITLE}
-	href={new URL('rss.xml', Astro.site)}
-/>
+<link rel="alternate" type="application/rss+xml" title={META_TITLE} href={new URL('rss.xml', Astro.site)} />
 <meta name="generator" content={Astro.generator} />
+<link rel="mask-icon" href="/mask-icon.png" color="#111827">
+<meta name="theme-color" content="#111827">
+<meta name="google-site-verification" content="PA786LYEhHO1sZbU66vp2kG0-xjzBoYD94WCRTRNNt8" />
 
 <!-- Font preloads -->
 <!-- <link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
@@ -54,4 +54,7 @@ const META_TITLE = title ?? `${SITE_TITLE} | ${SITE_DESCRIPTION}`;
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
+
+<!-- Google Analytics -->
+<GoogleAnalytics />
 </head>

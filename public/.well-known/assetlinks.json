@@ -1,0 +1,16 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.anibookquotes.twa",
+      "sha256_cert_fingerprints": [
+        "3C:39:9B:AE:C9:18:C7:3E:44:F4:AD:3C:09:E3:87:C9:EA:B8:86:26:32:19:FD:A2:D2:F7:39:64:97:45:9A:13",
+        "1A:4E:6B:C5:19:0A:F6:E5:5F:63:83:FF:53:3B:6C:A9:5A:E9:D1:D7:AA:4D:E3:70:D0:09:A0:1E:10:37:D7:EF"
+      ]
+    }
+  }
+]
