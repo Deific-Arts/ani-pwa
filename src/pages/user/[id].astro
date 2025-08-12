@@ -1,7 +1,15 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+
+const url = new URL(Astro.request.url);
+const origin = url.origin;
+const userId = Astro.params.id;
+const userDetails = await fetch(`${origin}/api/users/details/${userId}`).then(response => response.json());
+const user = userDetails.id ? JSON.stringify(userDetails) : null;
+const pageTitle = userDetails.id ? `${userDetails.username ?? userDetails.email} | Ani Book Quotes` : null;
+const bio = userDetails.id ? userDetails.bio : null;
 ---
 
-<Layout>
-  <ani-user-view></ani-user-view>
+<Layout heading={pageTitle} description={bio}>
+  <ani-user-view user={user}></ani-user-view>
 </Layout>

@@ -15,11 +15,12 @@ export const POST: APIRoute = async ({ request }) => {
       email: identifier,
       options: {
         shouldCreateUser: true,
-        emailRedirectTo: `${origin}/login/callback`,
+        emailRedirectTo: `${origin}/callbacks/email`,
       }
     });
 
     if (error) {
+      console.log(error);
       return new Response(
         JSON.stringify({ success: false, message: error.message, error }),
         { status: error.status || 500 }

@@ -30,7 +30,7 @@ export const GET: APIRoute = async ({ params }) => {
         ...comment,
         user: {
           ...comment.user,
-          avatar: `${avatarBaseURL}/${comment.user.avatar}`
+          avatar: !!comment.user.avatar ? `${avatarBaseURL}/${comment.user.avatar}` : null
         }
       }
     });

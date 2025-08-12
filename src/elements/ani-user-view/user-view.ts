@@ -12,15 +12,12 @@ import styles from './styles';
 import '../ani-quote/quote';
 import '../ani-comment/comment';
 
-// const API_URL = import.meta.env.VITE_API_URL;
-const APP_URL = window.location.origin;
-
 @customElement('ani-user-view')
 export default class AniUserView extends LitElement {
   static styles = [styles, sharedStyles];
 
   @property()
-  user!: IProfile;
+  user: string | null = null;
 
   @property()
   userId: string = '';
@@ -40,77 +37,63 @@ export default class AniUserView extends LitElement {
   @state()
   userState: IUserStore = userStore.getInitialState();
 
-  firstUpdated() {
-    this.getUser();
-  }
-
   updated(changedProperties: Map<string, unknown>) {
-    if (changedProperties.has('user')) {
-      this.follow = this.userState.profile?.following?.includes(this.user.id) || false;
+    if (changedProperties.has('user') && typeof this.user === 'string') {
+      const user = JSON.parse(this.user);
+      this.follow = this.userState.profile?.following?.includes(user.id) || false;
     }
   }
 
   render() {
-    console.log(this.user);
+    const user = this.user ? JSON.parse(this.user) : null;
+    const displayName = this.user ? user.username ?? user.email : null;
+
     return html`
       <hr />
-      ${this.user && this.hasFetchedUser ?
+      ${user ?
         html `
           <header>
             <div>
-              ${this.user.avatar
-                ? html`<img class="profile" src="${this.user.avatar}" alt="${this.user.username}" />`
-                : html`<img class="profile" src="https://placehold.co/80x80?text=${this.user.username}" alt="${this.user?.username}" />`
+              ${user.avatar
+                ? html`<img class="profile" src="${user.avatar}" alt="${displayName}" />`
+                : html`<img class="profile" src="https://placehold.co/80x80?text=${displayName}" alt="${displayName}" />`
               }
-              ${this.userState.isLoggedIn && this.user.id !== this.userState.profile?.id ? html`
-                <kemet-button variant="circle" outlined title="Follow ${this.user.username}" @click=${() => this.handleFollow()}>
+              ${this.userState.isLoggedIn && user.id !== this.userState.profile?.id ? html`
+                <kemet-button variant="circle" outlined title="Follow ${displayName}" @click=${() => this.handleFollow()}>
                   <kemet-icon icon="${this.follow ? 'person-fill-dash' : 'person-fill-add'}" size="24"></kemet-icon>
                 </kemet-button>
               ` : null}
             </div>
             <div>
-              <h2>${this.user.username}</h2>
+              <h2>${displayName}</h2>
               <aside>
-                <span>${this.user.counts?.quotes} quotes</span>
-                <span>${this.user.counts?.followers} followers</span>
-                <span>${this.user.counts?.following} following</span>
+                <span>${user.counts?.quotes} quotes</span>
+                <span>${user.counts?.followers} followers</span>
+                <span>${user.counts?.following} following</span>
               </aside>
-              <div>${this.parseBio(this.user.bio)}</div>
+              <div>${this.parseBio(user.bio)}</div>
             </div>
           </header>
           ${this.makeBooks()}
         `
         : html`
           <header>
-            <p>Sorry, that user doesn't exist.</p>
-            <kemet-button variant="rounded" href="/">Go home</kemet-button>
+            <p>Sorry, we can't find anything about that user.</p>
+            <kemet-button variant="rounded" link="/">Go home</kemet-button>
           </header>
         `
       }
     `
   }
 
-  async getUser() {
-    const path = location.pathname.split('/');
-    const metaDescription = document.querySelector('meta[name="description"]') as HTMLMetaElement;
-    const metaPropertyTitle = document.querySelector('meta[property="og:title"]') as HTMLMetaElement;
-    const metaPropertyUrl = document.querySelector('meta[property="og:url"]') as HTMLMetaElement;
-
-    this.userId = this.userId || path[path.length - 1];
-    this.user = await fetch(`/api/users/details/${this.userId}`).then(response => response.json());
-    this.hasFetchedUser = true;
-
-    document.title = `${this.user.username} | Ani Book Quotes`;
-    if (metaDescription) metaDescription.content = this.user.bio || `User profile for ${this.user.username}`;
-    if (metaPropertyTitle) metaPropertyTitle.content = `${this.user.username} | Ani Book Quotes`;
-    if (metaPropertyUrl) metaPropertyUrl.content = `${APP_URL}/user/${this.user.id}`;
-  }
 
   makeBooks() {
-    if (this.user.books && this.user.books.length > 0) {
+    if (!this.user) return;
+    const user = JSON.parse(this.user);
+    if (user && user.books && user.books.length > 0) {
       return html`
         <ul>
-          ${this.user.books.map((book: IBook) => html`
+          ${user.books.map((book: IBook) => html`
             <li><ani-book identifier="${book.identifier}"></ani-book></li>
           `)}
         </ul>
@@ -126,6 +109,9 @@ export default class AniUserView extends LitElement {
   }
 
   async handleFollow() {
+    if (!this.user) return;
+
+    const user = JSON.parse(this.user);
     this.followers = this.follow ? this.followers - 1 : this.followers + 1;
     this.follow = !this.follow;
 
@@ -134,7 +120,7 @@ export default class AniUserView extends LitElement {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ follow: this.follow, follower: this.user.id })
+      body: JSON.stringify({ follow: this.follow, follower: user.id })
     });
   }
 }

@@ -68,13 +68,14 @@ export default class AniTopNav extends LitElement {
   makeProfileImage() {
     const profileImage = this.userState.profile?.avatar;
     const isLoginPage = this.appState.currentRoute.includes('login');
+    const displayName = this.userState?.profile?.username ?? this.userState?.profile?.email;
 
     if (this.userState.isLoggedIn) {
       return html`
         <a href="/profile" aria-label="Profile Avatar">
           ${profileImage
-            ? html`<img src="${profileImage}" alt="${this.userState.profile.username}" />`
-            : html`<img src="https://placehold.co/80x80?text=${this.userState.profile.username}" alt="${this.userState.profile.username}" />`
+            ? html`<img src="${profileImage}" alt="${displayName}" />`
+            : html`<img src="https://placehold.co/80x80?text=${displayName}" alt="${displayName}" />`
           }
         </a>
       `

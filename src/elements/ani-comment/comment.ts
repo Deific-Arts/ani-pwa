@@ -23,6 +23,7 @@ export default class AniComment extends LitElement {
   userState: IUserStore = userStore.getInitialState();
 
   render() {
+    const displayName = this.comment.user.username ?? this.comment.user.email;
     return this.comment && this.comment.user ? html`
       ${this.comment.user.id === this.userState.profile?.id
         ? html`<button aria-label="Delete"><kemet-icon icon="x-lg" size="16" @click=${() => this.deleteComment()}></kemet-icon></button>`
@@ -30,13 +31,13 @@ export default class AniComment extends LitElement {
       }
       <div>
         ${this.comment.user.avatar
-          ? html`<img src="${this.comment.user.avatar}" alt="${this.comment.user.username}" />`
-          : html`<img src="https://placehold.co/80x80?text=${this.comment.user.username}" alt="${this.comment.user.username}" />`
+          ? html`<img src="${this.comment.user.avatar}" alt="${displayName}" />`
+          : html`<img src="https://placehold.co/80x80?text=${displayName}" alt="${displayName}" />`
         }
       </div>
       <div class="comment">
         <header>
-          <strong>${this.comment.user.username}</strong> <span>commented ${this.displayDate()} ago</span>
+          <strong>${displayName}</strong> <span>commented ${this.displayDate()} ago</span>
         </header>
         <figure>
           <br />

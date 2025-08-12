@@ -1,7 +1,16 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+
+const url = new URL(Astro.request.url);
+const origin = url.origin;
+const quoteId = Astro.params.id;
+const quoteDetails = await fetch(`${origin}/api/quotes/${quoteId}`).then(response => response.json());
+const quote = quoteDetails.id ? JSON.stringify(quoteDetails) : null;
+const pageTitle = quoteDetails.id ? `A quote by ${quoteDetails.user.username ?? quoteDetails.user.email} | Ani Book Quotes` : null;
 ---
 
-<Layout>
-  <ani-quote-view></ani-quote-view>
+<Layout
+  heading={pageTitle}
+  description={quoteDetails.quote ? `${quoteDetails.quote} - ${quoteDetails.book.title}` : null}>
+  <ani-quote-view quote={quote}></ani-quote-view>
 </Layout>

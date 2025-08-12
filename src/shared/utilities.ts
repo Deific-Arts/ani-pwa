@@ -13,6 +13,7 @@ export const isObjectEmpty = <T extends object>(obj: T): boolean => {
 }
 
 export const isLocalhost = RUNTIME_ENVIRONMENT === 'local';
+export const isDevelopment = RUNTIME_ENVIRONMENT === 'development';
 export const isProduction = RUNTIME_ENVIRONMENT === 'production';
 
 export const throttle = <T extends (...args: any[]) => void>(
