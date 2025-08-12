@@ -28,6 +28,9 @@ switch (process.env.PUBLIC_RUNTIME_ENVIRONMENT) {
 
 
 const pwaConfig = {
+  mode: process.env.PUBLIC_RUNTIME_ENVIRONMENT === 'production' ? 'production' : 'development',
+  base: '/',
+  scope: '/',
   registerType: 'autoUpdate',
   includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
   manifest: {
