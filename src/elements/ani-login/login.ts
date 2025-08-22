@@ -5,34 +5,24 @@ import KemetInput from 'kemet-ui/dist/components/kemet-input/kemet-input';
 import alertStore, { type IAlertStore } from '../../store/alert';
 import styles from './styles';
 import sharedStyles, { stylesVendors } from '../../shared/styles';
-import KemetButton from 'kemet-ui/dist/components/kemet-button/kemet-button';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
-import { ENUM_ALERT_STATUS } from '../../shared/enums';
-import KemetTabs from 'kemet-ui/dist/components/kemet-tabs/kemet-tabs';
 
-interface ICredentials {
-  identifier: string;
-  password: string;
-}
-
-const API_URL = import.meta.env.VITE_API_URL;
 
 @customElement('ani-login')
-export default class aniLogin extends LitElement {
+export default class AniLogin extends LitElement {
   static styles = [styles, sharedStyles, stylesVendors];
 
   @state()
-  code: string = new URLSearchParams(window.location.search).get('code') || '';
+  success: boolean | null = null;
+
+  @state()
+  disabled: boolean = false;
 
   @state()
   userState: IUserStore = userStore.getInitialState();
 
   @state()
   alertState: IAlertStore = alertStore.getInitialState();
-
-
-
-
 
   @query('form[action*=auth]')
   loginForm!: HTMLFormElement;
@@ -46,6 +36,10 @@ export default class aniLogin extends LitElement {
   }
 
   render() {
+    if (this.userState.isLoggedIn) {
+      window.location.href = '/';
+    }
+
     return html`
       <kemet-card>
         <hr /><br />
@@ -53,16 +47,18 @@ export default class aniLogin extends LitElement {
           <kemet-field label="Email">
             <kemet-input required slot="input" name="identifier" rounded validate-on-blur></kemet-input>
           </kemet-field>
-          <kemet-button variant="rounded">
+          <kemet-button variant="rounded" ?disabled=${this.disabled}>
             Get magic link <kemet-icon slot="right" icon="chevron-right"></kemet-icon>
           </kemet-button>
         </form>
+        ${this.success ? html`<p>Check your email for a magic link to login.</p>` : null}
       </kemet-card>
     `
   }
 
   handleLogin(event: SubmitEvent) {
     event.preventDefault();
+    this.disabled = true;
     this.fetchLogin(this.loginIdentifier.value);
   }
 
@@ -84,23 +80,18 @@ export default class aniLogin extends LitElement {
           this.alertState.setMessage(unsafeHTML(response.message));
           this.alertState.setOpened(true);
           this.alertState.setIcon('exclamation-circle');
+          this.disabled = false;
           return;
         }
 
         // success
-        window.location.href = '/';
-      })
-      // .catch(() => {
-      //   this.alertState.setStatus('error');
-      //   this.alertState.setMessage('There was an unknown problem while logging you in.');
-      //   this.alertState.setOpened(true);
-      //   this.alertState.setIcon('exclamation-circle');
-      // });
+        this.success = true;
+      });
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'ani-login': aniLogin
+    'ani-login': AniLogin
   }
 }

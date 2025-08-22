@@ -26,4 +26,15 @@ export default css`
   .error {
     color: var(--app-error-color);
   }
+
+  .no-books {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: auto;
+    margin: auto;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
 `;
