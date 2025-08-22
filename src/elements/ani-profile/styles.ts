@@ -85,9 +85,13 @@ export const libraryStyles = css`
   }
 
   h2 {
-    padding: 0 2rem;
     margin: var(--kemet-spacer-xl) 0;
     border-bottom: none;
+  }
+
+  p,
+  h2 {
+    padding: 0 2rem;
   }
 
   form {
@@ -97,6 +101,7 @@ export const libraryStyles = css`
   kemet-field {
     padding: 1rem;
   }
+
 
   @media screen and (min-width: 768px) {
     ul {

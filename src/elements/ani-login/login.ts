@@ -5,10 +5,7 @@ import KemetInput from 'kemet-ui/dist/components/kemet-input/kemet-input';
 import alertStore, { type IAlertStore } from '../../store/alert';
 import styles from './styles';
 import sharedStyles, { stylesVendors } from '../../shared/styles';
-import KemetButton from 'kemet-ui/dist/components/kemet-button/kemet-button';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
-import { ENUM_ALERT_STATUS } from '../../shared/enums';
-import KemetTabs from 'kemet-ui/dist/components/kemet-tabs/kemet-tabs';
 
 
 @customElement('ani-login')
