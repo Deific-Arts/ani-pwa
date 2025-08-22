@@ -10,9 +10,6 @@ export const POST: APIRoute = async ({ request }) => {
   const data = await request.json();
   const { identifier } = data;
 
-  console.log('-----------------------');
-  console.log(origin);
-
   try {
     const { data, error } = await supabase.auth.signInWithOtp({
       email: identifier,
