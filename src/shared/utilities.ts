@@ -1,4 +1,9 @@
 import Stripe from 'stripe';
+import Autolinker from 'autolinker';
+import DOMPurify from 'dompurify';
+import { marked } from 'marked';
+import { html } from 'lit';
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
 const RUNTIME_ENVIRONMENT = import.meta.env.PUBLIC_RUNTIME_ENVIRONMENT;
 
@@ -59,4 +64,9 @@ export const getStripe = () => {
   }
 
   return _stripe;
+}
+
+export const parseStringToSafeLit = (theString: string) => {
+  const sanitizedString = DOMPurify.sanitize(marked.parse(theString) as string);
+  return html`${unsafeHTML(Autolinker.link(sanitizedString))}`;
 }

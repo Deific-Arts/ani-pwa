@@ -9,6 +9,7 @@ import sharedStyles from '../../shared/styles';
 import '../ani-like/like';
 import '../ani-comments/comments';
 import '../ani-requotes/requotes';
+import { parseStringToSafeLit } from '../../shared/utilities';
 
 
 @customElement('ani-quote')
@@ -79,7 +80,7 @@ export default class AniQuote extends LitElement {
           <div>
             <kemet-tooltip distance="24" strategy="absolute">
               <button slot="trigger" aria-label="Show note"><kemet-icon icon="journal-text" size="24"></kemet-icon></button>
-              <div slot="content"><strong>Note:</strong> ${this.quote.note}</div>
+              <div slot="content">${parseStringToSafeLit(this.quote.note)}</div>
             </kemet-tooltip>
           </div>
         ` : html `
