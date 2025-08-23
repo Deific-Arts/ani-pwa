@@ -9,6 +9,7 @@ import { marked } from 'marked';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
+import { parseStringToSafeLit } from '../../shared/utilities';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -41,7 +42,7 @@ export default class AniComment extends LitElement {
         </header>
         <figure>
           <br />
-          <div>${this.parse(this.comment.comment)}</div>
+          <div>${parseStringToSafeLit(this.comment.comment)}</div>
         </figure>
       </div>
     ` : null
@@ -60,10 +61,10 @@ export default class AniComment extends LitElement {
     this.setAttribute("hidden", '');
   }
 
-  parse(comment: string) {
-    const sanitizedComment = DOMPurify.sanitize(marked.parse(comment) as string);
-    return html`${unsafeHTML(Autolinker.link(sanitizedComment))}`;
-  }
+  // parse(comment: string) {
+  //   const sanitizedComment = DOMPurify.sanitize(marked.parse(comment) as string);
+  //   return html`${unsafeHTML(Autolinker.link(sanitizedComment))}`;
+  // }
 }
 
 declare global {

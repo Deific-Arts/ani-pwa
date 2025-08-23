@@ -13,6 +13,25 @@ export default css`
     justify-content: center;
   }
 
+  .success {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .success h2 {
+    font-size: 1.5rem;
+    border-bottom: none;
+  }
+
+  .success kemet-icon {
+    color: var(--app-success-color);
+  }
+
 
 
   @media screen and (min-width: 768px) {
