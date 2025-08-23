@@ -57,15 +57,11 @@ export default class AniNewQuote extends LitElement {
     if (this.userState.isLoggedIn) {
       return html`
         <form>
-          <div class="no-books">
-            <span class="error">You need to add a book to your library and select it before you can add a quote.</span>
-            <kemet-button variant="pill" link="profile/library" outlined>Add a book to your library</kemet-button>
-          </div>
-          ${
-            !hasBooks ? html`
-              <p class="error">You need to add a book to your library and select it before you can add a quote.</p>
-              <p><kemet-button variant="rounded" link="profile/library" outlined>Add a book to your library</kemet-button></p>
-            ` : null
+          ${!hasBooks ? html`
+            <div class="no-books">
+              <span class="error">You need to add a book to your library and select it before you can add a quote.</span>
+              <kemet-button variant="pill" link="profile/library" outlined>Add a book to your library</kemet-button>
+            </div>` : null
           }
           <kemet-field slug="quote" label="The quote">
             <kemet-textarea slot="input" name="quote" filled rounded required ?disabled=${!hasBooks}></kemet-textarea>
@@ -83,7 +79,6 @@ export default class AniNewQuote extends LitElement {
               </kemet-field>
             </div>` : null
           }
-          </div>
           <kemet-field slug="note" label="Enter any notes you may have about this quote">
             <kemet-textarea slot="input" name="note" filled rounded ?disabled=${!hasBooks}></kemet-textarea>
             <kemet-count slot="component" message="characters remaining." limit="1000"></kemet-count>
