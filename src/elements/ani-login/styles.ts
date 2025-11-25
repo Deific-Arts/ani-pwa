@@ -13,6 +13,10 @@ export default css`
     justify-content: center;
   }
 
+  h2 {
+    text-align: center;
+  }
+
   .success {
     display: flex;
     align-items: center;
@@ -30,11 +34,5 @@ export default css`
 
   .success kemet-icon {
     color: var(--app-success-color);
-  }
-
-
-
-  @media screen and (min-width: 768px) {
-
   }
 `;
