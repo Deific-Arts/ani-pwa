@@ -16,6 +16,10 @@ export default  css`
 
   a {
     color: var(--app-text-color);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--kemet-spacer-xs);
   }
 
   svg {

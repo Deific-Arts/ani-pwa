@@ -43,13 +43,14 @@ export default class AniLogin extends LitElement {
     return html`
       <kemet-card>
         ${this.success ? html`<div class="success"><kemet-icon icon="check-lg" size="72"></kemet-icon><h2>Check your email for a magic link to login.</h2></div>` : null}
-        <hr /><br />
+        <hr />
         <form method="post" action="api/auth/login" @submit=${(event: SubmitEvent) => this.handleLogin(event)}>
-          <kemet-field label="Email">
+          <h2>Login</h2>
+          <kemet-field label="Enter your email">
             <kemet-input required slot="input" name="identifier" ?disabled=${this.disabled} rounded validate-on-blur></kemet-input>
           </kemet-field>
           <kemet-button variant="rounded" ?disabled=${this.disabled}>
-            Get magic link <kemet-icon slot="right" icon="chevron-right"></kemet-icon>
+            Get login link via email <kemet-icon slot="right" icon="chevron-right"></kemet-icon>
           </kemet-button>
         </form>
       </kemet-card>
