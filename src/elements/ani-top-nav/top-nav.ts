@@ -84,7 +84,7 @@ export default class AniTopNav extends LitElement {
     if (!isLoginPage) {
       return html`
         <a href="/login">
-          <kemet-icon icon="door-open" size="24"></kemet-icon>
+          Login&nbsp;<kemet-icon icon="door-open" size="24"></kemet-icon>
         </a>
       `;
     }
