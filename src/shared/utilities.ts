@@ -70,3 +70,13 @@ export const parseStringToSafeLit = (theString: string) => {
   const sanitizedString = DOMPurify.sanitize(marked.parse(theString) as string);
   return html`${unsafeHTML(Autolinker.link(sanitizedString))}`;
 }
+
+export function getPWADisplayMode() {
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+  if (document.referrer.startsWith('android-app://')) {
+    return 'twa'; // Detected Android Wrapper
+  } else if ((navigator as any).standalone || isStandalone) {
+    return 'standalone';
+  }
+  return 'browser';
+}
