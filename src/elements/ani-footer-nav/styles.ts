@@ -22,4 +22,21 @@ export default css`
     box-sizing: border-box;
     max-width: var(--app-page-width);
   }
+
+  ul {
+    display: inline-flex;
+    gap: var(--kemet-spacer-md);
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    padding: var(--kemet-spacer-md);
+    list-style: none;
+    width: 100%;
+    box-sizing: border-box;
+
+    a {
+      display: block;
+      width: 196px;
+    }
+  }
 `;
