@@ -7,6 +7,7 @@ export default css`
 
   a {
     color: inherit;
+    text-decoration: none;
   }
 
   img {

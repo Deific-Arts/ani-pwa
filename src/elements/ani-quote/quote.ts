@@ -7,6 +7,7 @@ import styles from './styles';
 import sharedStyles from '../../shared/styles';
 
 import '../ani-like/like';
+import '../ani-share/share';
 import '../ani-comments/comments';
 import '../ani-requotes/requotes';
 import { parseStringToSafeLit } from '../../shared/utilities';
@@ -64,7 +65,7 @@ export default class AniQuote extends LitElement {
         </div>
       </header>
       <figure>
-        <blockquote>${this.quote.quote}</blockquote>
+        ${this.makeBlockquote()}
         <cite>&mdash;&nbsp;${this.quote.book.title}${this.quote.page && html`, page: ${this.quote.page}`}</cite>
       </figure>
       <footer>
@@ -88,7 +89,9 @@ export default class AniQuote extends LitElement {
             <kemet-icon icon="journal" size="24"></kemet-icon>
           </div>
         `}
-        ${this.makeLink()}
+        <div>
+          <ani-share .quote=${this.isRequote ? this.originalQuote : this.quote}></ani-share>
+        </div>
       </footer>
     `
   }
@@ -99,12 +102,12 @@ export default class AniQuote extends LitElement {
     return formatDistance(now, then);
   }
 
-  makeLink() {
+  makeBlockquote() {
     if (!this.isSingle) {
       const id = this.isRequote && this.originalQuote ? this.originalQuote.id : this.quote.id
       return html`
         <div>
-          <a href="/quote/${id}"><kemet-icon icon="link" size="24"></kemet-icon></a>
+          <a href="/quote/${id}"><blockquote>${this.quote.quote}</blockquote></a>
         </div>
       `
     }
