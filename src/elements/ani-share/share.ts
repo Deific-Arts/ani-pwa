@@ -33,8 +33,31 @@ export default class AniShare extends LitElement {
   }
 
   async handleShare() {
-    this.modalsState.setShareOpened(true);
-    this.quoteState.setCurrentQuote(this.quote);
+    const canShareNative = !!(navigator.share);
+
+    if (canShareNative) {
+      this.shareNative();
+    } else {
+      this.modalsState.setShareOpened(true);
+      this.quoteState.setCurrentQuote(this.quote);
+    }
+  }
+
+  private async shareNative() {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Check out this quote from Ani Book Quotes!',
+          text: this.quote.quote ?? '',
+          url: `${window.location.origin}/quote/${this.quote.id}`,
+        });
+      } catch (error) {
+        console.log('User cancelled or share failed');
+      }
+    } else {
+      this.modalsState.setShareOpened(true);
+      this.quoteState.setCurrentQuote(this.quote);
+    }
   }
 }
 

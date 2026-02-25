@@ -6,6 +6,9 @@ import sitemap from '@astrojs/sitemap';
 import AstroPWA from '@vite-pwa/astro'
 import * as dotenv from 'dotenv';
 
+// enable only when simulating https locally
+//import mkcert from 'vite-plugin-mkcert';
+
 dotenv.config();
 
 
@@ -93,5 +96,11 @@ export default defineConfig({
 	integrations: [mdx(), sitemap(), AstroPWA(pwaConfig)],
   output: 'server',
   adapter: node({ mode: 'standalone' }),
-  server: { port }
+  server: { port },
+  // vite: {
+  //   plugins: [mkcert()],
+  //   server: {
+  //     https: true,
+  //   }
+  // }
 });

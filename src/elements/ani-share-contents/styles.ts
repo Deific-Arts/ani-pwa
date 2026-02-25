@@ -3,25 +3,14 @@ import { css } from 'lit';
 export default css`
   :host {
     display: block;
+    min-width: 360px;
   }
 
   h2 {
+    font-size: 1.5rem;
+    color: var(--app-color);
     max-width: 480px;
-    color: var(--app-color)
-  }
-
-  div {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    padding-bottom: var(--kemet-spacer-md);
-  }
-
-  @media screen and (min-width: 768px) {
-    div {
-      flex-direction: row;
-    }
+    margin-bottom: var(--kemet-spacer-md);
   }
 
   .copy {
@@ -30,10 +19,10 @@ export default css`
     grid-template-columns: auto 1fr;
     width: 100%;
     padding: 0;
-    margin: 0;
     align-items: center;
     justify-content: center;
-    border: var(--app-border);
+    text-align: left;
+    background-color: rgba(0, 0, 0, 0.25);
     border-radius: var(--kemet-border-radius-lg);
 
     & > * {
@@ -45,5 +34,17 @@ export default css`
       white-space: nowrap;
       background-color: var(--app-card-background-color);
     }
+  }
+
+  ul {
+    color: var(--app-color);
+    list-style: none;
+    padding: 0 1rem;
+    margin: 1rem 0;
+    display: flex;
+    gap: var(--kemet-spacer-xl);
+    justify-content: space-around;
+    text-align: left;
+    flex-direction: row;
   }
 `;
