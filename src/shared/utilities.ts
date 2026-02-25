@@ -80,3 +80,19 @@ export function getPWADisplayMode() {
   }
   return 'browser';
 }
+
+
+/**
+ * Truncates a string to a specified length and appends an ellipsis.
+ * * @param str The input string to truncate
+ * @param count The maximum character count (including the ellipsis)
+ * @returns The truncated string
+ */
+export const truncateString = (str: string, count: number): string => {
+  if (!str || str.length <= count) return str;
+  const sub = str.slice(0, count - 3);
+  // Find the last space within the substring to avoid splitting words
+  const lastSpace = sub.lastIndexOf(' ');
+  return (lastSpace > 0 ? sub.slice(0, lastSpace) : sub).trim() + '...';
+};
+
