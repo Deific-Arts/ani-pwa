@@ -10,6 +10,10 @@ export default css`
     text-decoration: none;
   }
 
+  cite a {
+    color: var(--app-link-color);
+  }
+
   img {
     width: 56px;
     height: 56px;
