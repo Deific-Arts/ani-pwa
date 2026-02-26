@@ -66,7 +66,9 @@ export default class AniQuote extends LitElement {
       </header>
       <figure>
         ${this.makeBlockquote()}
-        <cite>&mdash;&nbsp;${this.quote.book.title}${this.quote.page && html`, page: ${this.quote.page}`}</cite>
+        <cite>
+          &mdash;&nbsp;<a href=${`https://www.google.com/books/edition/_/${this.quote.book.identifier}`} target="_blank">${this.quote.book.title}</a>
+          ${this.quote.book.authors && this.quote.book.authors[0] ? html`by&nbsp;${this.quote.book.authors[0]}` : ''}${this.quote.page && html`, page: ${this.quote.page}`}</cite>
       </figure>
       <footer>
         <div>
