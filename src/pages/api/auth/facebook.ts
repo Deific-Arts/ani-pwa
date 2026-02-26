@@ -4,26 +4,31 @@ import { supabase } from "../../../shared/database";
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request }) => {
-  const body = await request.json();
-  const { accessToken, refreshToken } = body;
+export const GET: APIRoute = async ({ request }) => {
+  const url = new URL(request.url);
+  const origin = url.origin;
 
   try {
-    const { data, error } = await supabase.auth.setSession({
-      access_token: accessToken,
-      refresh_token: refreshToken,
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'facebook',
+      options: {
+        redirectTo: `${origin}/callbacks/facebook`,
+      }
     });
 
-
     if (error) {
+      console.log(error);
       return new Response(
-        JSON.stringify({ success: false, message: error.message, error }),
+        JSON.stringify({ success: false, message: error.message }),
         { status: error.status || 500 }
       );
     }
 
     return new Response(
-      JSON.stringify({ success: true, message: 'OK', data }),
+      JSON.stringify({
+        success: true,
+        url: data.url
+      }),
       { status: 200 }
     );
   } catch(error) {

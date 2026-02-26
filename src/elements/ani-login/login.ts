@@ -46,13 +46,22 @@ export default class AniLogin extends LitElement {
         <hr />
         <form method="post" action="api/auth/login" @submit=${(event: SubmitEvent) => this.handleLogin(event)}>
           <h2>Login</h2>
-          <kemet-field label="Enter your email">
+          <kemet-field label="Enter your email to continue">
             <kemet-input required slot="input" name="identifier" ?disabled=${this.disabled} rounded validate-on-blur></kemet-input>
           </kemet-field>
           <kemet-button variant="rounded" ?disabled=${this.disabled}>
             Get login link via email <kemet-icon slot="right" icon="chevron-right"></kemet-icon>
           </kemet-button>
         </form>
+        <br /><span>or</span><hr /><br />
+        <ul class="social-buttons">
+          <li>
+            <button class="facebook" @click=${() => this.handleFacebookLogin()}>
+              <kemet-icon icon="facebook" size="24"></kemet-icon>
+              Continue with Facebook
+            </button>
+          </li>
+        </ul>
       </kemet-card>
     `
   }
@@ -87,6 +96,22 @@ export default class AniLogin extends LitElement {
 
         // success
         this.success = true;
+      });
+  }
+
+  handleFacebookLogin() {
+    fetch('/api/auth/facebook')
+      .then(response => response.json())
+      .then(response => {
+        if (response.error) {
+          this.alertState.setStatus('error');
+          this.alertState.setMessage(unsafeHTML(response.message));
+          this.alertState.setOpened(true);
+          this.alertState.setIcon('exclamation-circle');
+          return;
+        }
+
+        window.location.href = response.url;
       });
   }
 }
