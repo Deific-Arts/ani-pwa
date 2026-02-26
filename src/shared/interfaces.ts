@@ -34,6 +34,7 @@ export interface IBook {
   published_at: string;
   title: string;
   identifier: string;
+  authors: string[];
 }
 
 export interface IGoogleBook {

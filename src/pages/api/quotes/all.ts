@@ -25,7 +25,7 @@ export const GET: APIRoute = async ({ request }) => {
       .from('Quotes')
       .select(`
         *,
-        book:Books(id, title, identifier),
+        book:Books(id, title, identifier, authors),
         user:Profiles(id, username, email, avatar)
       `)
       .limit(pageSize)
