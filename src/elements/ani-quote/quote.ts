@@ -103,15 +103,12 @@ export default class AniQuote extends LitElement {
   }
 
   makeBlockquote() {
-    if (!this.isSingle) {
-      const id = this.isRequote && this.originalQuote ? this.originalQuote.id : this.quote.id
-      return html`
-        <div>
-          <a href="/quote/${id}"><blockquote>${this.quote.quote}</blockquote></a>
-        </div>
-      `
-    }
-    return null;
+    const id = this.isRequote && this.originalQuote ? this.originalQuote.id : this.quote.id
+    return html`
+      <div>
+        <a href="/quote/${id}"><blockquote>${this.quote.quote}</blockquote></a>
+      </div>
+    `
   }
 
   deleteQuote() {
