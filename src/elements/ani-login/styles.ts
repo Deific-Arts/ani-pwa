@@ -17,6 +17,11 @@ export default css`
     text-align: center;
   }
 
+  span {
+    display: flex;
+    justify-content: center;
+  }
+
   .success {
     display: flex;
     align-items: center;
@@ -34,5 +39,35 @@ export default css`
 
   .success kemet-icon {
     color: var(--app-success-color);
+  }
+
+  .social-buttons {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      text-align: center;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+    }
+
+    .facebook {
+      color: white;
+      background-color: #1877f2;
+    }
   }
 `;
