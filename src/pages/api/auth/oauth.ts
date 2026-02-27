@@ -1,18 +1,20 @@
 import type { APIRoute } from "astro";
 import 'dotenv/config'
 import { supabase } from "../../../shared/database";
+import type { Provider } from "@supabase/supabase-js";
 
 export const prerender = false;
 
 export const GET: APIRoute = async ({ request }) => {
   const url = new URL(request.url);
+  const provider = url.searchParams.get('provider');
   const origin = url.origin;
 
   try {
     const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'facebook',
+      provider: provider as Provider,
       options: {
-        redirectTo: `${origin}/callbacks/facebook`,
+        redirectTo: `${origin}/callbacks/ouath`,
       }
     });
 
