@@ -58,7 +58,7 @@ export default css`
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
+      gap: 1rem;
       width: 100%;
       text-align: center;
       padding: 0.75rem 1rem;
@@ -68,6 +68,12 @@ export default css`
     .facebook {
       color: white;
       background-color: #1877f2;
+    }
+
+    .google {
+      color: white;
+      background-color: #131314;
+      border: 1px solid #7c7e7d;
     }
   }
 `;

@@ -1,8 +1,5 @@
 import { LitElement, html } from 'lit';
 import { customElement, state, query } from 'lit/decorators.js';
-
-// import userStore, { type IUserStore } from '../../store/user';
-// import appStore, { type IAppStore } from '../../store/app';
 import alertStore, { type IAlertStore } from '../../store/alert';
 
 import styles from './styles';
@@ -12,12 +9,6 @@ import sharedStyles from '../../shared/styles';
 @customElement('ani-login-callback')
 export class AniLoginCallback extends LitElement {
   static styles = [sharedStyles, styles];
-
-  // @state()
-  // userState: IUserStore = userStore.getInitialState();
-
-  // @state()
-  // appState: IAppStore = appStore.getState();
 
   @state()
   alertState: IAlertStore = alertStore.getInitialState();
